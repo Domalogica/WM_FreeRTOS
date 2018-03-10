@@ -406,9 +406,19 @@
               <FilePath>.\Code\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>gpio.c</FileName>
+              <FileName>power_switches.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\gpio.c</FilePath>
+              <FilePath>.\Code\src\power_switches.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio_user.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\gpio_user.c</FilePath>
+            </File>
+            <File>
+              <FileName>error_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\error_handler.c</FilePath>
             </File>
           </Files>
         </Group>

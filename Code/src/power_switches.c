@@ -4,7 +4,6 @@
 #include "power_switches.h"
 #include "error_handler.h"
 
-
 uint8_t TRIAC_Enable(uint32_t triac_num){
 	
 	if(triac_num <= 9 && triac_num >= 1){
@@ -18,41 +17,33 @@ uint8_t TRIAC_Enable(uint32_t triac_num){
 			case 7: GPIO_SetOutputPin(PORT_TRIAC_7,  PIN_TRIAC_7); break; 
 			case 8: GPIO_SetOutputPin(PORT_TRIAC_8,  PIN_TRIAC_8); break; 
 			case 9: GPIO_SetOutputPin(PORT_TRIAC_9,  PIN_TRIAC_9); break; 
-			default: return ERR_NOT_FOUND; 
+			default: return (uint8_t)ERR_NOT_FOUND; 
 		}
-	}else return ERR_INVALID_ARG;
+	}else return (uint8_t)ERR_INVALID_ARG;
 	
 	return STATUS_OK;
 }
         
-
+/*
 void TRIAC_Disable(uint32_t triac_num){
 	
-	
-
 }
 
 uint8_t TRIAC_IsEnable(uint32_t triac_num){
 	
-	
-
 }
 
 void MOSFET_Enable(uint32_t triac_num){
 	
-
 }
 
 void MOSFET_Disable(uint32_t triac_num){
 	
-	
-
 }
 
 uint8_t MOSFET_IsEnable(uint32_t triac_num){
 	
-	
-
 }
+*/
 
 

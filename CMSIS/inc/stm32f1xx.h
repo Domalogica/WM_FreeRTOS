@@ -150,7 +150,7 @@
 #elif defined(STM32F103xE)
   #include "stm32f103xe.h"
 #elif defined(STM32F103xG)
-  #include "stm32f103xg.h"
+  #include "stm32f103xg.h" 
 #elif defined(STM32F105xC)
   #include "stm32f105xc.h"
 #elif defined(STM32F107xC)

@@ -4,6 +4,7 @@
 #include "queue.h"
 #include "main.h"
 #include "gpio.h"
+#include "gpio_user.h"
 
 void vTaskDefault (void *argument);
 void vTaskDebug (void *argument);
@@ -24,15 +25,20 @@ int main (void){
 }
 
 void vTaskDefault (void *argument){
-	
+
 	while(1)
 	{
 		GPIOF->BSRR |= GPIO_BSRR_BS10;
 		vTaskDelay(100);
 		GPIOF->BSRR |= GPIO_BSRR_BR10;
 		vTaskDelay(100);
+		/*
+		GPIO_SetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
+		vTaskDelay(100);
+		GPIO_ResetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
+		vTaskDelay(100);
+		*/
 	}
-	
 }
 
 void vTaskDebug (void *argument){

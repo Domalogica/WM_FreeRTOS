@@ -30,6 +30,6 @@
 #define	ERR_NOT_INITIALIZED          -20
 #define	ERR_BAUDRATE_UNAVAILABLE     -21
 #define	ERR_PACKET_COLLISION         -22
-#define	ERR_PROTOCOL                 -23
+
 
 #endif /* _ERROR_HANDLER_H_ */
