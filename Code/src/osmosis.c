@@ -1,4 +1,4 @@
-#include "osmos_dispeser.h"
+#include "osmosis.h"
 
 void enable_source(Osmosis *osmosis, uint32_t ultra, uint32_t permeate){
   if ((*osmosis).source){
@@ -43,9 +43,9 @@ void callback_osmosis(Osmosis *osmosis){
 }
 
 uint8_t valve_ultra(Osmosis *osmosis){
-  return (*osmosis).source);
+  return (*osmosis).source;
 }
 
 uint8_t valve_permiate(Osmosis *osmosis){
-  return !(*osmosis).source);
+  return !(*osmosis).source;
 }
