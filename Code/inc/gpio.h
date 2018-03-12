@@ -1,9 +1,6 @@
 #ifndef _GPIO_H_
 #define _GPIO_H_
 
-#if defined (GPIOA) || defined (GPIOB) || defined (GPIOC) || defined (GPIOD) || defined (GPIOE) || \
-																														 defined (GPIOF) || defined (GPIOG)
-																														 
 //GPIO_PIN PIN
 #define GPIO_PIN_0                      (GPIO_BSRR_BS0 << 8)  | 0x00000001U  /*!< Select pin 0 */
 #define GPIO_PIN_1                      (GPIO_BSRR_BS1 << 8)  | 0x00000002U  /*!< Select pin 1 */
@@ -29,82 +26,79 @@
                                          GPIO_PIN_15) /*!< Select all pins */
 																					
 //GPIO_MODE Mode
-#define LL_GPIO_MODE_ANALOG              0x00000000U   /*!< Select analog mode */
-#define LL_GPIO_MODE_FLOATING            GPIO_CRL_CNF0_0   /*!< Select floating mode */
-#define LL_GPIO_MODE_INPUT               GPIO_CRL_CNF0_1   /*!< Select input mode */
-#define LL_GPIO_MODE_OUTPUT              GPIO_CRL_MODE0_0   /*!< Select general purpose output mode */
-#define LL_GPIO_MODE_ALTERNATE           (GPIO_CRL_CNF0_1 | GPIO_CRL_MODE0_0) /*!< Select alternate function mode */
+#define GPIO_MODE_ANALOG              0x00000000U   /*!< Select analog mode */
+#define GPIO_MODE_FLOATING            GPIO_CRL_CNF0_0   /*!< Select floating mode */
+#define GPIO_MODE_INPUT               GPIO_CRL_CNF0_1   /*!< Select input mode */
+#define GPIO_MODE_OUTPUT              GPIO_CRL_MODE0_0   /*!< Select general purpose output mode */
+#define GPIO_MODE_ALTERNATE           (GPIO_CRL_CNF0_1 | GPIO_CRL_MODE0_0) /*!< Select alternate function mode */
 
 
 // GPIO_OUTPUT Output Type
-#define LL_GPIO_OUTPUT_PUSHPULL          0x00000000U /*!< Select push-pull as output type */
-#define LL_GPIO_OUTPUT_OPENDRAIN         GPIO_CRL_CNF0_0 /*!< Select open-drain as output type */
+#define GPIO_OUTPUT_PUSHPULL          0x00000000U /*!< Select push-pull as output type */
+#define GPIO_OUTPUT_OPENDRAIN         GPIO_CRL_CNF0_0 /*!< Select open-drain as output type */
 
 //GPIO_SPEED Output Speed
-#define LL_GPIO_MODE_OUTPUT_10MHz        GPIO_CRL_MODE0_0            /*!< Select Output mode, max speed 10 MHz */
-#define LL_GPIO_MODE_OUTPUT_2MHz       	 GPIO_CRL_MODE0_1            /*!< Select Output mode, max speed 20 MHz */
-#define LL_GPIO_MODE_OUTPUT_50MHz        GPIO_CRL_MODE0              /*!< Select Output mode, max speed 50 MHz */
-
-#define LL_GPIO_SPEED_FREQ_LOW           LL_GPIO_MODE_OUTPUT_2MHz    /*!< Select I/O low output speed    */
-#define LL_GPIO_SPEED_FREQ_MEDIUM        LL_GPIO_MODE_OUTPUT_10MHz   /*!< Select I/O medium output speed */
-#define LL_GPIO_SPEED_FREQ_HIGH          LL_GPIO_MODE_OUTPUT_50MHz   /*!< Select I/O high output speed   */
+#define GPIO_MODE_OUTPUT_10MHz        GPIO_CRL_MODE0_0            /*!< Select Output mode, max speed 10 MHz */
+#define GPIO_MODE_OUTPUT_2MHz         GPIO_CRL_MODE0_1            /*!< Select Output mode, max speed 20 MHz */
+#define GPIO_MODE_OUTPUT_50MHz        GPIO_CRL_MODE0              /*!< Select Output mode, max speed 50 MHz */
 
 //GPIO_PULL Pull Up Pull Down
-#define LL_GPIO_PULL_DOWN                0x00000000U    /*!< Select I/O pull down */
-#define LL_GPIO_PULL_UP                  GPIO_ODR_ODR0  /*!< Select I/O pull up */
+#define GPIO_PULL_NO                  (0x00000000U)  /*!< Select I/O no pull */
+#define GPIO_PULL_DOWN                (0x00000000U)    /*!< Select I/O pull down */
+#define GPIO_PULL_UP                  GPIO_ODR_ODR0  /*!< Select I/O pull up */
 
 
 //GPIO_EVENTOUT_PIN EVENTOUT Pin
-#define LL_GPIO_AF_EVENTOUT_PIN_0        AFIO_EVCR_PIN_PX0   /*!< EVENTOUT on pin 0 */
-#define LL_GPIO_AF_EVENTOUT_PIN_1        AFIO_EVCR_PIN_PX1   /*!< EVENTOUT on pin 1 */
-#define LL_GPIO_AF_EVENTOUT_PIN_2        AFIO_EVCR_PIN_PX2   /*!< EVENTOUT on pin 2 */
-#define LL_GPIO_AF_EVENTOUT_PIN_3        AFIO_EVCR_PIN_PX3   /*!< EVENTOUT on pin 3 */
-#define LL_GPIO_AF_EVENTOUT_PIN_4        AFIO_EVCR_PIN_PX4   /*!< EVENTOUT on pin 4 */
-#define LL_GPIO_AF_EVENTOUT_PIN_5        AFIO_EVCR_PIN_PX5   /*!< EVENTOUT on pin 5 */
-#define LL_GPIO_AF_EVENTOUT_PIN_6        AFIO_EVCR_PIN_PX6   /*!< EVENTOUT on pin 6 */
-#define LL_GPIO_AF_EVENTOUT_PIN_7        AFIO_EVCR_PIN_PX7   /*!< EVENTOUT on pin 7 */
-#define LL_GPIO_AF_EVENTOUT_PIN_8        AFIO_EVCR_PIN_PX8   /*!< EVENTOUT on pin 8 */
-#define LL_GPIO_AF_EVENTOUT_PIN_9        AFIO_EVCR_PIN_PX9   /*!< EVENTOUT on pin 9 */
-#define LL_GPIO_AF_EVENTOUT_PIN_10       AFIO_EVCR_PIN_PX10  /*!< EVENTOUT on pin 10 */
-#define LL_GPIO_AF_EVENTOUT_PIN_11       AFIO_EVCR_PIN_PX11  /*!< EVENTOUT on pin 11 */
-#define LL_GPIO_AF_EVENTOUT_PIN_12       AFIO_EVCR_PIN_PX12  /*!< EVENTOUT on pin 12 */
-#define LL_GPIO_AF_EVENTOUT_PIN_13       AFIO_EVCR_PIN_PX13  /*!< EVENTOUT on pin 13 */
-#define LL_GPIO_AF_EVENTOUT_PIN_14       AFIO_EVCR_PIN_PX14  /*!< EVENTOUT on pin 14 */
-#define LL_GPIO_AF_EVENTOUT_PIN_15       AFIO_EVCR_PIN_PX15  /*!< EVENTOUT on pin 15 */
+#define GPIO_AF_EVENTOUT_PIN_0        AFIO_EVCR_PIN_PX0   /*!< EVENTOUT on pin 0 */
+#define GPIO_AF_EVENTOUT_PIN_1        AFIO_EVCR_PIN_PX1   /*!< EVENTOUT on pin 1 */
+#define GPIO_AF_EVENTOUT_PIN_2        AFIO_EVCR_PIN_PX2   /*!< EVENTOUT on pin 2 */
+#define GPIO_AF_EVENTOUT_PIN_3        AFIO_EVCR_PIN_PX3   /*!< EVENTOUT on pin 3 */
+#define GPIO_AF_EVENTOUT_PIN_4        AFIO_EVCR_PIN_PX4   /*!< EVENTOUT on pin 4 */
+#define GPIO_AF_EVENTOUT_PIN_5        AFIO_EVCR_PIN_PX5   /*!< EVENTOUT on pin 5 */
+#define GPIO_AF_EVENTOUT_PIN_6        AFIO_EVCR_PIN_PX6   /*!< EVENTOUT on pin 6 */
+#define GPIO_AF_EVENTOUT_PIN_7        AFIO_EVCR_PIN_PX7   /*!< EVENTOUT on pin 7 */
+#define GPIO_AF_EVENTOUT_PIN_8        AFIO_EVCR_PIN_PX8   /*!< EVENTOUT on pin 8 */
+#define GPIO_AF_EVENTOUT_PIN_9        AFIO_EVCR_PIN_PX9   /*!< EVENTOUT on pin 9 */
+#define GPIO_AF_EVENTOUT_PIN_10       AFIO_EVCR_PIN_PX10  /*!< EVENTOUT on pin 10 */
+#define GPIO_AF_EVENTOUT_PIN_11       AFIO_EVCR_PIN_PX11  /*!< EVENTOUT on pin 11 */
+#define GPIO_AF_EVENTOUT_PIN_12       AFIO_EVCR_PIN_PX12  /*!< EVENTOUT on pin 12 */
+#define GPIO_AF_EVENTOUT_PIN_13       AFIO_EVCR_PIN_PX13  /*!< EVENTOUT on pin 13 */
+#define GPIO_AF_EVENTOUT_PIN_14       AFIO_EVCR_PIN_PX14  /*!< EVENTOUT on pin 14 */
+#define GPIO_AF_EVENTOUT_PIN_15       AFIO_EVCR_PIN_PX15  /*!< EVENTOUT on pin 15 */
 
 //GPIO_EVENTOUT_PORT EVENTOUT Port
-#define LL_GPIO_AF_EVENTOUT_PORT_A       AFIO_EVCR_PORT_PA  /*!< EVENTOUT on port A */
-#define LL_GPIO_AF_EVENTOUT_PORT_B       AFIO_EVCR_PORT_PB  /*!< EVENTOUT on port B */
-#define LL_GPIO_AF_EVENTOUT_PORT_C       AFIO_EVCR_PORT_PC  /*!< EVENTOUT on port C */
-#define LL_GPIO_AF_EVENTOUT_PORT_D       AFIO_EVCR_PORT_PD  /*!< EVENTOUT on port D */
-#define LL_GPIO_AF_EVENTOUT_PORT_E       AFIO_EVCR_PORT_PE  /*!< EVENTOUT on port E */
+#define GPIO_AF_EVENTOUT_PORT_A       AFIO_EVCR_PORT_PA  /*!< EVENTOUT on port A */
+#define GPIO_AF_EVENTOUT_PORT_B       AFIO_EVCR_PORT_PB  /*!< EVENTOUT on port B */
+#define GPIO_AF_EVENTOUT_PORT_C       AFIO_EVCR_PORT_PC  /*!< EVENTOUT on port C */
+#define GPIO_AF_EVENTOUT_PORT_D       AFIO_EVCR_PORT_PD  /*!< EVENTOUT on port D */
+#define GPIO_AF_EVENTOUT_PORT_E       AFIO_EVCR_PORT_PE  /*!< EVENTOUT on port E */
 
 //GPIO_EXTI_PORT GPIO EXTI PORT
-#define LL_GPIO_AF_EXTI_PORTA            (uint32_t)0   /*!< EXTI PORT A */
-#define LL_GPIO_AF_EXTI_PORTB            (uint32_t)1   /*!< EXTI PORT B */
-#define LL_GPIO_AF_EXTI_PORTC            (uint32_t)2   /*!< EXTI PORT C */
-#define LL_GPIO_AF_EXTI_PORTD            (uint32_t)3   /*!< EXTI PORT D */
-#define LL_GPIO_AF_EXTI_PORTE            (uint32_t)4   /*!< EXTI PORT E */
-#define LL_GPIO_AF_EXTI_PORTF            (uint32_t)5   /*!< EXTI PORT F */
-#define LL_GPIO_AF_EXTI_PORTG            (uint32_t)6   /*!< EXTI PORT G */
+#define GPIO_AF_EXTI_PORTA            (uint32_t)0   /*!< EXTI PORT A */
+#define GPIO_AF_EXTI_PORTB            (uint32_t)1   /*!< EXTI PORT B */
+#define GPIO_AF_EXTI_PORTC            (uint32_t)2   /*!< EXTI PORT C */
+#define GPIO_AF_EXTI_PORTD            (uint32_t)3   /*!< EXTI PORT D */
+#define GPIO_AF_EXTI_PORTE            (uint32_t)4   /*!< EXTI PORT E */
+#define GPIO_AF_EXTI_PORTF            (uint32_t)5   /*!< EXTI PORT F */
+#define GPIO_AF_EXTI_PORTG            (uint32_t)6   /*!< EXTI PORT G */
 
 //GPIO_LL_EC_EXTI_LINE GPIO EXTI LINE
-#define LL_GPIO_AF_EXTI_LINE0            (uint32_t)(0x000FU << 16 | 0)  /*!< EXTI_POSITION_0  | EXTICR[0] */
-#define LL_GPIO_AF_EXTI_LINE1            (uint32_t)(0x00F0U << 16 | 0)  /*!< EXTI_POSITION_4  | EXTICR[0] */
-#define LL_GPIO_AF_EXTI_LINE2            (uint32_t)(0x0F00U << 16 | 0)  /*!< EXTI_POSITION_8  | EXTICR[0] */
-#define LL_GPIO_AF_EXTI_LINE3            (uint32_t)(0xF000U << 16 | 0)  /*!< EXTI_POSITION_12 | EXTICR[0] */
-#define LL_GPIO_AF_EXTI_LINE4            (uint32_t)(0x000FU << 16 | 1)  /*!< EXTI_POSITION_0  | EXTICR[1] */
-#define LL_GPIO_AF_EXTI_LINE5            (uint32_t)(0x00F0U << 16 | 1)  /*!< EXTI_POSITION_4  | EXTICR[1] */
-#define LL_GPIO_AF_EXTI_LINE6            (uint32_t)(0x0F00U << 16 | 1)  /*!< EXTI_POSITION_8  | EXTICR[1] */
-#define LL_GPIO_AF_EXTI_LINE7            (uint32_t)(0xF000U << 16 | 1)  /*!< EXTI_POSITION_12 | EXTICR[1] */
-#define LL_GPIO_AF_EXTI_LINE8            (uint32_t)(0x000FU << 16 | 2)  /*!< EXTI_POSITION_0  | EXTICR[2] */
-#define LL_GPIO_AF_EXTI_LINE9            (uint32_t)(0x00F0U << 16 | 2)  /*!< EXTI_POSITION_4  | EXTICR[2] */
-#define LL_GPIO_AF_EXTI_LINE10           (uint32_t)(0x0F00U << 16 | 2)  /*!< EXTI_POSITION_8  | EXTICR[2] */
-#define LL_GPIO_AF_EXTI_LINE11           (uint32_t)(0xF000U << 16 | 2)  /*!< EXTI_POSITION_12 | EXTICR[2] */
-#define LL_GPIO_AF_EXTI_LINE12           (uint32_t)(0x000FU << 16 | 3)  /*!< EXTI_POSITION_0  | EXTICR[3] */
-#define LL_GPIO_AF_EXTI_LINE13           (uint32_t)(0x00F0U << 16 | 3)  /*!< EXTI_POSITION_4  | EXTICR[3] */
-#define LL_GPIO_AF_EXTI_LINE14           (uint32_t)(0x0F00U << 16 | 3)  /*!< EXTI_POSITION_8  | EXTICR[3] */
-#define LL_GPIO_AF_EXTI_LINE15           (uint32_t)(0xF000U << 16 | 3)  /*!< EXTI_POSITION_12 | EXTICR[3] */
+#define GPIO_AF_EXTI_LINE0            (uint32_t)(0x000FU << 16 | 0)  /*!< EXTI_POSITION_0  | EXTICR[0] */
+#define GPIO_AF_EXTI_LINE1            (uint32_t)(0x00F0U << 16 | 0)  /*!< EXTI_POSITION_4  | EXTICR[0] */
+#define GPIO_AF_EXTI_LINE2            (uint32_t)(0x0F00U << 16 | 0)  /*!< EXTI_POSITION_8  | EXTICR[0] */
+#define GPIO_AF_EXTI_LINE3            (uint32_t)(0xF000U << 16 | 0)  /*!< EXTI_POSITION_12 | EXTICR[0] */
+#define GPIO_AF_EXTI_LINE4            (uint32_t)(0x000FU << 16 | 1)  /*!< EXTI_POSITION_0  | EXTICR[1] */
+#define GPIO_AF_EXTI_LINE5            (uint32_t)(0x00F0U << 16 | 1)  /*!< EXTI_POSITION_4  | EXTICR[1] */
+#define GPIO_AF_EXTI_LINE6            (uint32_t)(0x0F00U << 16 | 1)  /*!< EXTI_POSITION_8  | EXTICR[1] */
+#define GPIO_AF_EXTI_LINE7            (uint32_t)(0xF000U << 16 | 1)  /*!< EXTI_POSITION_12 | EXTICR[1] */
+#define GPIO_AF_EXTI_LINE8            (uint32_t)(0x000FU << 16 | 2)  /*!< EXTI_POSITION_0  | EXTICR[2] */
+#define GPIO_AF_EXTI_LINE9            (uint32_t)(0x00F0U << 16 | 2)  /*!< EXTI_POSITION_4  | EXTICR[2] */
+#define GPIO_AF_EXTI_LINE10           (uint32_t)(0x0F00U << 16 | 2)  /*!< EXTI_POSITION_8  | EXTICR[2] */
+#define GPIO_AF_EXTI_LINE11           (uint32_t)(0xF000U << 16 | 2)  /*!< EXTI_POSITION_12 | EXTICR[2] */
+#define GPIO_AF_EXTI_LINE12           (uint32_t)(0x000FU << 16 | 3)  /*!< EXTI_POSITION_0  | EXTICR[3] */
+#define GPIO_AF_EXTI_LINE13           (uint32_t)(0x00F0U << 16 | 3)  /*!< EXTI_POSITION_4  | EXTICR[3] */
+#define GPIO_AF_EXTI_LINE14           (uint32_t)(0x0F00U << 16 | 3)  /*!< EXTI_POSITION_8  | EXTICR[3] */
+#define GPIO_AF_EXTI_LINE15           (uint32_t)(0xF000U << 16 | 3)  /*!< EXTI_POSITION_12 | EXTICR[3] */
 
 //************************************************************************************************************
 //	GPIO_WRITE_READ Common Write and read registers Macros
@@ -115,7 +109,7 @@
   * @param  __VALUE__ Value to be written in the register
   * @retval None
   */
-#define LL_GPIO_WriteReg(__INSTANCE__, __REG__, __VALUE__) WRITE_REG(__INSTANCE__->__REG__, (__VALUE__))
+#define GPIO_WriteReg(__INSTANCE__, __REG__, __VALUE__) WRITE_REG(__INSTANCE__->__REG__, (__VALUE__))
 
 /**
   * @brief  Read a value in GPIO register
@@ -123,7 +117,7 @@
   * @param  __REG__ Register to be read
   * @retval Register value
   */
-#define LL_GPIO_ReadReg(__INSTANCE__, __REG__) READ_REG(__INSTANCE__->__REG__)
+#define GPIO_ReadReg(__INSTANCE__, __REG__) READ_REG(__INSTANCE__->__REG__)
 
 //**********************************************************************************************************
 
@@ -132,7 +126,7 @@
 					 General purpose Output, Alternate function Output.
    @param  Pin This parameter can be one of the following values:
            GPIO_PIN_0,  GPIO_PIN_1,  GPIO_PIN_2,  GPIO_PIN_3,
-					 GPIO_PIN_4,  GPIO_PIN_5,  GPIO_PIN_6,  GPIO_PIN_7,
+			GPIO_PIN_4,  GPIO_PIN_5,  GPIO_PIN_6,  GPIO_PIN_7,
 					 GPIO_PIN_8,  GPIO_PIN_9,  GPIO_PIN_10, GPIO_PIN_11,
            GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15
    @param  Mode This parameter can be one of the following values:
@@ -302,7 +296,4 @@ __STATIC_INLINE void GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint32_t PinMask)
   WRITE_REG(GPIOx->ODR, READ_REG(GPIOx->ODR) ^ ((PinMask >> 8 ) & 0x0000FFFFU));
 }
 
-#endif /* defined (GPIOA) || defined (GPIOB) || defined (GPIOC) || defined (GPIOD) || defined (GPIOE) || defined (GPIOF) || defined (GPIOG) */
-
 #endif //_GPIO_H_
-
