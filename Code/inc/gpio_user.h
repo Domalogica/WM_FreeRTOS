@@ -4,10 +4,10 @@
 #if defined(STM32F103xE)
 
 	#define PORT_LED_ACTIVE     GPIOF
-	#define PIN_LED_ACTIVE      10
+	#define PIN_LED_ACTIVE      GPIO_PIN_10
 
 	#define PORT_LED_FAILTURE   GPIOB
-	#define PIN_LED_FAILTURE    8
+	#define PIN_LED_FAILTURE    GPIO_PIN_8
 
 	#define PORT_TRIAC_1        GPIOD
 	#define PIN_TRIAC_1         GPIO_PIN_8
@@ -68,6 +68,7 @@
 
 #endif
 
-	void GPIO_Init (void);
+void GPIO_Init (void);
+
 
 #endif //_GPIO_USER_H_
