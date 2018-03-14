@@ -14,6 +14,7 @@ void vTaskDebug (void *argument);
 int main (void){
 
 	GPIO_Init();
+	TriacPortInit();
 	
 	xTaskCreate(vTaskDefault, "Default", 128, NULL, 1, NULL);
 	xTaskCreate(vTaskTriac,   "Triac",   128, NULL, 1, NULL);
@@ -24,7 +25,6 @@ int main (void){
 	while(1){
 	
 	}
-	
 }
 
 void vTaskDefault (void *argument){
@@ -35,7 +35,6 @@ void vTaskDefault (void *argument){
 		vTaskDelay(100);
 		GPIO_ResetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
 		vTaskDelay(100);
-		
 	}
 }
 
@@ -45,41 +44,41 @@ void vTaskTriac (void *argument){
 	
 	while(1)
 	{	
-		TRIAC_Enable(1);
+		TriacEnable(1);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(1);
+		TriacDisable(1);
 		
-		TRIAC_Enable(7);
+		TriacEnable(7);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(7);
+		TriacDisable(7);
 		
-		TRIAC_Enable(4);
+		TriacEnable(4);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(4);
+		TriacDisable(4);
 		
-		TRIAC_Enable(8);
+		TriacEnable(8);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(8);
+		TriacDisable(8);
 		
-		TRIAC_Enable(5);
+		TriacEnable(5);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(5);
+		TriacDisable(5);
 		
-		TRIAC_Enable(9);
+		TriacEnable(9);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(9);
+		TriacDisable(9);
 		
-		TRIAC_Enable(2);
+		TriacEnable(2);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(2);
+		TriacDisable(2);
 		
-		TRIAC_Enable(3);
+		TriacEnable(3);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(3);
+		TriacDisable(3);
 		
-		TRIAC_Enable(6);
+		TriacEnable(6);
 		vTaskDelay(switch_time);
-		TRIAC_Disable(6);
+		TriacDisable(6);
 	}
 }
 

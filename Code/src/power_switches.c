@@ -4,7 +4,42 @@
 #include "power_switches.h"
 #include "error_handler.h"
 
-int8_t TRIAC_Enable(uint32_t triac_num){
+void TriacPortInit(void){
+	
+	RCC->APB2ENR |= RCC_APB2ENR_IOPDEN; 
+	
+	//TRIAC gpio pin  config
+	GPIO_SetPinMode (PORT_TRIAC_1, PIN_TRIAC_1, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_1, PIN_TRIAC_1, GPIO_MODE_OUTPUT_10MHz);
+	
+	GPIO_SetPinMode (PORT_TRIAC_2, PIN_TRIAC_2, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_2, PIN_TRIAC_2, GPIO_MODE_OUTPUT_10MHz);
+
+	GPIO_SetPinMode (PORT_TRIAC_3, PIN_TRIAC_3, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_3, PIN_TRIAC_3, GPIO_MODE_OUTPUT_10MHz);
+	
+	GPIO_SetPinMode (PORT_TRIAC_4, PIN_TRIAC_4, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_4, PIN_TRIAC_4, GPIO_MODE_OUTPUT_10MHz);
+	
+	GPIO_SetPinMode (PORT_TRIAC_5, PIN_TRIAC_5, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_5, PIN_TRIAC_5, GPIO_MODE_OUTPUT_10MHz);
+	
+	GPIO_SetPinMode (PORT_TRIAC_6, PIN_TRIAC_6, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_6, PIN_TRIAC_6, GPIO_MODE_OUTPUT_10MHz);
+	
+	GPIO_SetPinMode (PORT_TRIAC_7, PIN_TRIAC_7, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_7, PIN_TRIAC_7, GPIO_MODE_OUTPUT_10MHz);
+	
+	GPIO_SetPinMode (PORT_TRIAC_8, PIN_TRIAC_8, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_8, PIN_TRIAC_8, GPIO_MODE_OUTPUT_10MHz);
+	
+	GPIO_SetPinMode (PORT_TRIAC_9, PIN_TRIAC_9, GPIO_MODE_OUTPUT);
+	GPIO_SetPinSpeed(PORT_TRIAC_9, PIN_TRIAC_9, GPIO_MODE_OUTPUT_10MHz);
+	
+	//MOSFET gpio pin config
+}
+
+int8_t TriacEnable(uint32_t triac_num){
 
 	if(triac_num <= 9 && triac_num >= 1){
 		switch (triac_num){
@@ -23,9 +58,8 @@ int8_t TRIAC_Enable(uint32_t triac_num){
 	
 	return STATUS_OK;
 }
-        
 
-int8_t TRIAC_Disable(uint32_t triac_num){
+int8_t TriacDisable(uint32_t triac_num){
 	
 	if(triac_num <= 9 && triac_num >= 1){
 		switch (triac_num){
@@ -44,6 +78,7 @@ int8_t TRIAC_Disable(uint32_t triac_num){
 	
 	return STATUS_OK;
 }
+
 /*
 int8_t TRIAC_IsEnable(uint32_t triac_num){
 	

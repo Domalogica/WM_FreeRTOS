@@ -420,6 +420,16 @@
               <FileType>1</FileType>
               <FilePath>.\Code\src\error_handler.c</FilePath>
             </File>
+            <File>
+              <FileName>utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\lcd_display.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
