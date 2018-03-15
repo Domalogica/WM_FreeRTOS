@@ -6,6 +6,7 @@
 #include "gpio.h"
 #include "gpio_user.h"
 #include "power_switches.h"
+#include "lcd_display.h"
 
 void vTaskDefault (void *argument);
 void vTaskTriac (void *argument);
@@ -15,6 +16,11 @@ int main (void){
 
 	GPIO_Init();
 	TriacPortInit();
+	LCD_Init();
+	LCD_Clear();
+	
+	LCD_SetCursor(1, 4);
+	LCD_SendString((uint8_t*)"WM_FreeRTOS", 11);
 	
 	xTaskCreate(vTaskDefault, "Default", 128, NULL, 1, NULL);
 	xTaskCreate(vTaskTriac,   "Triac",   128, NULL, 1, NULL);
@@ -32,9 +38,9 @@ void vTaskDefault (void *argument){
 	while(1)
 	{
 		GPIO_SetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
-		vTaskDelay(100);
+		vTaskDelay(200);
 		GPIO_ResetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
-		vTaskDelay(100);
+		vTaskDelay(200);
 	}
 }
 
