@@ -431,9 +431,9 @@
               <FilePath>.\Code\src\lcd_display.c</FilePath>
             </File>
             <File>
-              <FileName>system.c</FileName>
+              <FileName>system_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\system.c</FilePath>
+              <FilePath>.\Code\src\system_init.c</FilePath>
             </File>
           </Files>
         </Group>
