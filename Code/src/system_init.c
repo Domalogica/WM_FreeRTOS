@@ -1,8 +1,8 @@
 #include "stm32f1xx.h"
 #include "system_init.h"
 
-void RCC_Init (void){
-	
+void RCC_Init (void)
+{
 	RCC->CR |= ((uint32_t)RCC_CR_HSEON); 												// Enable HSE
 	while (!(RCC->CR & RCC_CR_HSERDY));													// Ready start HSE		
 	
@@ -26,11 +26,10 @@ void RCC_Init (void){
 	RCC->CFGR &= ~RCC_CFGR_SW;                   							 	// clear SW bits
   RCC->CFGR |= RCC_CFGR_SW_PLL;                 							// select source SYSCLK = PLL
 	while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_1) {} 			// wait till PLL is used
-		
 }
 
-void MCO_out (void){
-	
+void MCO_out (void)
+{
 	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;                       	// enable clock for port A
 	
 	GPIOA->CRH &= ~GPIO_CRH_CNF8_0;															// setting out alternative push-pull for PA8
@@ -38,5 +37,4 @@ void MCO_out (void){
 	GPIOA->CRH |= (GPIO_CRH_MODE8_0 | GPIO_CRH_MODE8_1);				// gpio speed 50 MHz
 	
 	RCC->CFGR |= RCC_CFGR_MCO_SYSCLK;														// select source clokc SYSCLK
-	
 }

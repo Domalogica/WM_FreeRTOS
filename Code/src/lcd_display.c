@@ -2,11 +2,10 @@
 #include "gpio.h"
 #include "lcd_display.h"
 
-void RS_GPIO_SET  (void);
-void RS_GPIO_RESET(void);
-void EN_GPIO_SET  (void); 
-void EN_GPIO_RESET(void); 
-
+void RS_GPIO_SET   (void);
+void RS_GPIO_RESET (void);
+void EN_GPIO_SET   (void); 
+void EN_GPIO_RESET (void); 
 void DB4_GPIO_SET  (void); 
 void DB4_GPIO_RESET(void); 
 void DB5_GPIO_SET  (void);
@@ -15,11 +14,10 @@ void DB6_GPIO_SET  (void);
 void DB6_GPIO_RESET(void); 
 void DB7_GPIO_SET  (void); 
 void DB7_GPIO_RESET(void); 
+void Delay(uint32_t count);
 
-void LIGHT_ON      (void);
-void LIGHT_OFF     (void);
-
-void LCD_Send(uint8_t buf){
+void LCD_Send(uint8_t buf)
+{
 	if ( (buf & 0x01) == 1) DB4_GPIO_SET(); 
   else DB4_GPIO_RESET();
 	
@@ -33,8 +31,8 @@ void LCD_Send(uint8_t buf){
 	else DB7_GPIO_RESET();
 }
 
-void LCD_SendCommand (uint8_t command){
-	
+void LCD_SendCommand (uint8_t command)
+{
 	RS_GPIO_RESET();
 	LCD_Send(command>>4);
 	EN_GPIO_SET();
@@ -47,8 +45,8 @@ void LCD_SendCommand (uint8_t command){
 	Delay(BISY_TIME);
 }
 
-void LCD_SendChar (uint8_t data){
-	
+void LCD_SendChar (uint8_t data)
+{
 	RS_GPIO_SET();
 	LCD_Send(data>>4);
 	EN_GPIO_SET();
@@ -63,45 +61,48 @@ void LCD_SendChar (uint8_t data){
 	Delay(BISY_TIME);
 }
 
-void LCD_SendString (uint8_t *str, uint8_t size){
-		for (int8_t i = 0; i < size; i++) 
-		{
-			LCD_SendChar(str[i]);
-		}
+void LCD_SendString (uint8_t *str, uint8_t size)
+{
+	for (int8_t i = 0; i < size; i++) 
+	{
+		LCD_SendChar(str[i]);
+	}
 }
 
-void LCD_SetCursor (uint8_t row, uint8_t col){
-	
+void LCD_SetCursor (uint8_t row, uint8_t col)
+{
 	uint8_t cursor_pos = 0x80;
 	
-	if (row == 2) {
+	if (row == 2) 
+	{
 		cursor_pos |= 0x40;
-	} else { 
+	} else 
+	{ 
 		cursor_pos |= 0x00;
 	}
 
-	if (col < 16) {
+	if (col < 16) 
+	{
 		cursor_pos |= col;
-	} else { 
+	} else 
+	{ 
 		cursor_pos |= 0x00;
 	}
 	
 	LCD_SendCommand(cursor_pos);
 }
 
-
-void LCD_Clear (void){
+void LCD_Clear (void)
+{
 	LCD_SendCommand (0x01); 
 	Delay(BISY_TIME);
 }
 
-void LCD_Init (void){
-	
-	//Port clock setting 
-	RCC->APB2ENR |= RCC_APB2ENR_IOPEEN;
-	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+void LCD_Init (void)
+{
+	RCC->APB2ENR |= RCC_APB2ENR_IOPEEN; //Enabling the clock PORT E
+	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN; //Enabling the clock PORT B
 
-	//GPIO pin config
 	GPIO_SetPinMode (LCD_DATA_PORT, LCD_RS_PIN, GPIO_MODE_OUTPUT);
 	GPIO_SetPinSpeed(LCD_DATA_PORT, LCD_RS_PIN, GPIO_MODE_OUTPUT_10MHz);
 
@@ -129,8 +130,9 @@ void LCD_Init (void){
 	DB5_GPIO_RESET();
 	DB6_GPIO_RESET(); 
 	DB7_GPIO_RESET(); 
-	LIGHT_ON      (); 
-
+	LCD_LightON();
+	
+	//Display init command
 	Delay(BISY_TIME);
 	EN_GPIO_RESET();
 	
@@ -178,73 +180,13 @@ void LCD_Init (void){
 	Delay(BISY_TIME);
 }
 
-void LCD_LightON (void){
-	LIGHT_ON();
-}
-
-void LCD_LightOff (void){
-	LIGHT_OFF();
-}
-
-void RS_GPIO_SET  (void) { 
-	GPIO_SetOutputPin  (LCD_DATA_PORT,   LCD_RS_PIN);
-}
-void RS_GPIO_RESET(void) {
-	GPIO_ResetOutputPin(LCD_DATA_PORT,   LCD_RS_PIN);
-}
-
-void EN_GPIO_SET  (void) {
-	GPIO_SetOutputPin  (LCD_DATA_PORT,   LCD_EN_PIN);
-}
-void EN_GPIO_RESET(void) {
-	GPIO_ResetOutputPin(LCD_DATA_PORT,   LCD_EN_PIN);
-}
-
-void DB4_GPIO_SET  (void) {
-	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB4_PIN);
-}
-
-void DB4_GPIO_RESET(void) {
-	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB4_PIN);
-}
-
-void DB5_GPIO_SET  (void) {
-	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB5_PIN);
-}
-
-void DB5_GPIO_RESET(void) {
-	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB5_PIN);
-}
-
-void DB6_GPIO_SET  (void) {
-	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB6_PIN);
-}
-
-void DB6_GPIO_RESET(void) {
-	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB6_PIN);
-}
-
-void DB7_GPIO_SET  (void) {
-	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB7_PIN);
-}
-
-void DB7_GPIO_RESET(void) {
-	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB7_PIN);
-}
-
-void LIGHT_ON      (void) { 
-	GPIO_SetOutputPin  (LCD_LIGHT_PORT, GPIO_PIN_12);
-}
-
-void LIGHT_OFF     (void) {
-	GPIO_ResetOutputPin(LCD_LIGHT_PORT, GPIO_PIN_12);
-}
-
-void Delay(uint32_t count){
+void Delay(uint32_t count)
+{
 	while(count--);
 }
-uint8_t LCD_GetRusChar(uint8_t num){
-	
+
+uint8_t LCD_GetRusChar(uint8_t num)
+{
 	uint8_t ANSI1251_CO_FF [] = {
 		 0x41,       //код 0xC0, символ 'А' //0
 		 0xA0,       //код 0xC1, символ 'Б' //1
@@ -311,9 +253,74 @@ uint8_t LCD_GetRusChar(uint8_t num){
 		 0xC6,       //код 0xFE, символ 'ю'	//62
 		 0xC7        //код 0xFF, символ 'я'	//63
 	};
-	
 	return  ANSI1251_CO_FF[num];
 }
 
+void LCD_LightON (void)
+{
+	GPIO_SetOutputPin  (LCD_LIGHT_PORT, GPIO_PIN_12);
+}
 
+void LCD_LightOff (void)
+{
+	GPIO_ResetOutputPin(LCD_LIGHT_PORT, GPIO_PIN_12);
+}
 
+void RS_GPIO_SET  (void)
+{ 
+	GPIO_SetOutputPin  (LCD_DATA_PORT,   LCD_RS_PIN);
+}
+
+void RS_GPIO_RESET(void)
+{
+	GPIO_ResetOutputPin(LCD_DATA_PORT,   LCD_RS_PIN);
+}
+
+void EN_GPIO_SET  (void)
+{
+	GPIO_SetOutputPin  (LCD_DATA_PORT,   LCD_EN_PIN);
+}
+void EN_GPIO_RESET(void)
+{
+	GPIO_ResetOutputPin(LCD_DATA_PORT,   LCD_EN_PIN);
+}
+
+void DB4_GPIO_SET  (void)
+{
+	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB4_PIN);
+}
+
+void DB4_GPIO_RESET(void)
+{
+	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB4_PIN);
+}
+
+void DB5_GPIO_SET  (void)
+{
+	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB5_PIN);
+}
+
+void DB5_GPIO_RESET(void)
+{
+	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB5_PIN);
+}
+
+void DB6_GPIO_SET  (void)
+{
+	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB6_PIN);
+}
+
+void DB6_GPIO_RESET(void)
+{
+	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB6_PIN);
+}
+
+void DB7_GPIO_SET  (void)
+{
+	GPIO_SetOutputPin  (LCD_DATA_PORT,  LCD_DB7_PIN);
+}
+
+void DB7_GPIO_RESET(void)
+{
+	GPIO_ResetOutputPin(LCD_DATA_PORT,  LCD_DB7_PIN);
+}

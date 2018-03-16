@@ -13,12 +13,14 @@ void vTaskDefault (void *argument);
 void vTaskTriac (void *argument);
 void vTaskDebug (void *argument);
 
-int main (void){
-
+int main (void)
+{
 	RCC_Init();
 	//MCO_out(); Debug frequency testing (PIN_A8)
 	GPIO_Init();
-	TriacPortInit();
+	TRIAC_PortInit();
+	MOSFET_PortInit();
+	ULN_PortInit();
 	LCD_Init();
 	LCD_Clear();
 	
@@ -36,8 +38,8 @@ int main (void){
 	}
 }
 
-void vTaskDefault (void *argument){
-
+void vTaskDefault (void *argument)
+{
 	while(1)
 	{
 		GPIO_SetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
@@ -47,57 +49,56 @@ void vTaskDefault (void *argument){
 	}
 }
 
-void vTaskTriac (void *argument){
-	
+void vTaskTriac (void *argument)
+{
 	uint16_t switch_time = 200;
-	
 	while(1)
 	{	
-		TriacEnable(1);
+		TRIAC_Enable(1);
 		vTaskDelay(switch_time);
-		TriacDisable(1);
+		TRIAC_Disable(1);
 		
-		TriacEnable(7);
+		TRIAC_Enable(7);
 		vTaskDelay(switch_time);
-		TriacDisable(7);
+		TRIAC_Disable(7);
 		
-		TriacEnable(4);
+		TRIAC_Enable(4);
 		vTaskDelay(switch_time);
-		TriacDisable(4);
+		TRIAC_Disable(4);
 		
-		TriacEnable(8);
+		TRIAC_Enable(8);
 		vTaskDelay(switch_time);
-		TriacDisable(8);
+		TRIAC_Disable(8);
 		
-		TriacEnable(5);
+		TRIAC_Enable(5);
 		vTaskDelay(switch_time);
-		TriacDisable(5);
+		TRIAC_Disable(5);
 		
-		TriacEnable(9);
+		TRIAC_Enable(9);
 		vTaskDelay(switch_time);
-		TriacDisable(9);
+		TRIAC_Disable(9);
 		
-		TriacEnable(2);
+		TRIAC_Enable(2);
 		vTaskDelay(switch_time);
-		TriacDisable(2);
+		TRIAC_Disable(2);
 		
-		TriacEnable(3);
+		TRIAC_Enable(3);
 		vTaskDelay(switch_time);
-		TriacDisable(3);
+		TRIAC_Disable(3);
 		
-		TriacEnable(6);
+		TRIAC_Enable(6);
 		vTaskDelay(switch_time);
-		TriacDisable(6);
+		TRIAC_Disable(6);
 	}
 }
 
-void vTaskDebug (void *argument){
-	
+void vTaskDebug (void *argument)
+{
 	while(1)
 	{	
 		GPIO_SetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
 		vTaskDelay(20);
 		GPIO_ResetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
-		vTaskDelay(2000);
+		vTaskDelay(3000);
 	}
 }

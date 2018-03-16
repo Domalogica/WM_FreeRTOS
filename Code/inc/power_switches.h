@@ -22,48 +22,57 @@
 	#define PORT_TRIAC_9        GPIOD
 	#define PIN_TRIAC_9         GPIO_PIN_13
 
-	#define PORT_MOSFET_1       //GPIOx
-	#define PIN_MOSFET_1        //x
-	#define PORT_MOSFET_2       //GPIOx
-	#define PIN_MOSFET_2        //x
-	#define PORT_MOSFET_3       //GPIOx
-	#define PIN_MOSFET_3        //x
-	#define PORT_MOSFET_4       //GPIOx
-	#define PIN_MOSFET_4        //x
+	#define PORT_MOSFET_1       GPIOF
+	#define PIN_MOSFET_1        GPIO_PIN_12
+	#define PORT_MOSFET_2       GPIOF
+	#define PIN_MOSFET_2        GPIO_PIN_14
+	#define PORT_MOSFET_3       GPIOF
+	#define PIN_MOSFET_3        GPIO_PIN_15
+	#define PORT_MOSFET_4       GPIOF
+	#define PIN_MOSFET_4        GPIO_PIN_13
 
-	#define PORT_ULN_CH_1       //GPIOx
-	#define PIN_ULN_CH_1        //x
-	#define PORT_ULN_CH_2       //GPIOx
-	#define PIN_ULN_CH_2        //x
-	#define PORT_ULN_CH_3       //GPIOx
-	#define PIN_ULN_CH_3        //x
-	#define PORT_ULN_CH_4       //GPIOx
-	#define PIN_ULN_CH_4        //x
-	#define PORT_ULN_CH_5       //GPIOx
-	#define PIN_ULN_CH_5        //x
-	#define PORT_ULN_CH_6       //GPIOx
-	#define PIN_ULN_CH_6        //x
-	#define PORT_ULN_CH_7       //GPIOx
-	#define PIN_ULN_CH_7        //x
-	#define PORT_ULN_CH_8       //GPIOx
-	#define PIN_ULN_CH_8        //x
-	#define PORT_ULN_CH_9       //GPIOx
-	#define PIN_ULN_CH_9        //x
-	#define PORT_ULN_CH_10      //GPIOx
-	#define PIN_ULN_CH_10       //x
-	#define PORT_ULN_CH_11      //GPIOx
-	#define PIN_ULN_CH_11       //x
-	#define PORT_ULN_CH_12      //GPIOx
-	#define PIN_ULN_CH_12       //x
-	#define PORT_ULN_CH_13      //GPIOx
-	#define PIN_ULN_CH_13       //x
-	#define PORT_ULN_CH_14      //GPIOx
-	#define PIN_ULN_CH_14       //x
+	#define PORT_ULN_CH_1       GPIOG
+	#define PIN_ULN_CH_1        GPIO_PIN_9
+	#define PORT_ULN_CH_2       GPIOG
+	#define PIN_ULN_CH_2        GPIO_PIN_10
+	#define PORT_ULN_CH_3       GPIOG
+	#define PIN_ULN_CH_3        GPIO_PIN_11
+	#define PORT_ULN_CH_4       GPIOG
+	#define PIN_ULN_CH_4        GPIO_PIN_12
+	#define PORT_ULN_CH_5       GPIOG
+	#define PIN_ULN_CH_5        GPIO_PIN_13
+	#define PORT_ULN_CH_6       GPIOG
+	#define PIN_ULN_CH_6        GPIO_PIN_14
+	#define PORT_ULN_CH_7       GPIOG
+	#define PIN_ULN_CH_7        GPIO_PIN_15
+	
+	#define PORT_ULN_CH_8       GPIOE
+	#define PIN_ULN_CH_8        GPIO_PIN_9
+	#define PORT_ULN_CH_9       GPIOE
+	#define PIN_ULN_CH_9        GPIO_PIN_10
+	#define PORT_ULN_CH_10      GPIOE
+	#define PIN_ULN_CH_10       GPIO_PIN_11
+	#define PORT_ULN_CH_11      GPIOE
+	#define PIN_ULN_CH_11       GPIO_PIN_12
+	#define PORT_ULN_CH_12      GPIOE
+	#define PIN_ULN_CH_12       GPIO_PIN_13
+	#define PORT_ULN_CH_13      GPIOE
+	#define PIN_ULN_CH_13       GPIO_PIN_14
+	#define PORT_ULN_CH_14      GPIOE
+	#define PIN_ULN_CH_14       GPIO_PIN_15
 
 #endif
 
-void   TriacPortInit(void);
-int8_t TriacEnable  (uint32_t triac_num);
-int8_t TriacDisable (uint32_t triac_num);
+void   TRIAC_PortInit(void);
+int8_t TRIAC_Enable  (uint32_t triac_num);
+int8_t TRIAC_Disable (uint32_t triac_num);
+
+void MOSFET_PortInit(void);
+int8_t MOSFET_Enable(uint32_t mosfet_num);
+int8_t MOSFET_Disable(uint32_t mosfet_num);
+
+void ULN_PortInit(void);
+int8_t ULN_Enable(uint32_t uln_num);
+int8_t ULN_Disable(uint32_t uln_num);
 
 #endif //_POWER_SWITCHES_H_
