@@ -73,15 +73,13 @@ void LCD_SetCursor (uint8_t row, uint8_t col)
 {
 	uint8_t cursor_pos = 0x80;
 	
-	if (row == 2) 
-	{
-		cursor_pos |= 0x40;
-	} else 
-	{ 
-		cursor_pos |= 0x00;
-	}
-
-	if (col < 16) 
+	//00h..13h + 40h..53h + 14h..27h + 54h..67h
+	cursor_pos |= (row == 0) ? 0x00 : 0x80;
+	cursor_pos |= (row == 1) ? 0x40 : 0x80;
+	cursor_pos |= (row == 2) ? 0x14 : 0x80;
+	cursor_pos |= (row == 3) ? 0x54 : 0x80;
+	
+	if (col < 20) 
 	{
 		cursor_pos |= col;
 	} else 

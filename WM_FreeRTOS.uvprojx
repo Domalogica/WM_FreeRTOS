@@ -435,6 +435,16 @@
               <FileType>1</FileType>
               <FilePath>.\Code\src\system_init.c</FilePath>
             </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

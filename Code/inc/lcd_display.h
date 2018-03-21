@@ -1,7 +1,7 @@
 #ifndef _LCD_DISPLAY_H_
 #define _LCD_DISPLAY_H_
 
-#define BISY_TIME       3000 //TODO: set min bisy time
+#define BISY_TIME       5000 //TODO: set min bisy time
 
 #define LCD_RS_PIN			GPIO_PIN_5
 #define LCD_EN_PIN			GPIO_PIN_4
