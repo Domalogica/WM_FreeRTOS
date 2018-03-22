@@ -1,6 +1,9 @@
 #ifndef _GPIO_USER_H_
 #define _GPIO_USER_H_
 
+#include "stm32f1xx.h"
+#include "gpio.h"
+
 #if defined(STM32F103xE)
 
 	#define PORT_LED_ACTIVE     GPIOF

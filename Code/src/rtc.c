@@ -1,4 +1,3 @@
-#include "stm32f1xx.h"
 #include "rtc.h"
 
 __STATIC_INLINE void APB1_GRP1_EnableClock(uint32_t Periphs);

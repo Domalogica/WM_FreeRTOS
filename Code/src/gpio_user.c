@@ -1,6 +1,4 @@
-#include "stm32f1xx.h"
 #include "gpio_user.h"
-#include "gpio.h"
 
 void GPIO_Init (void)
 {

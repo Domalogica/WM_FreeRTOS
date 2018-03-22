@@ -1,6 +1,10 @@
 #ifndef _POWER_SWITCHES_H_
 #define _POWER_SWITCHES_H_
 
+#include "stm32f1xx.h"
+#include "gpio.h"
+#include "error_handler.h"
+
 #if defined(STM32F103xE)
 
 	#define PORT_TRIAC_1        GPIOD

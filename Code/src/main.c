@@ -16,27 +16,25 @@ void vTaskDefault	(void *argument);
 void vTaskUart		(void *argument);
 void vTaskTriac	 	(void *argument);
 void vTaskDebug 	(void *argument);
-//void vTaskRTC 		(void *argument);
 void vTaskRGB 		(void *argument);
 
 int main (void)
 {
 	RCC_Init();
 	//MCO_out(); Debug frequency testing (PIN_A8)
-	//RTC_Init();
 	GPIO_Init();
 	UART3_Init();
 	TRIAC_PortInit();
 	MOSFET_PortInit();
 	ULN_PortInit();
-	
+
+
 	xTaskCreate(vTaskDefault, "Default", 128, NULL, 1, NULL);
 	xTaskCreate(vTaskUart,    "Uart",    128, NULL, 1, NULL);
 	xTaskCreate(vTaskTriac,   "Triac",   128, NULL, 1, NULL);
 	xTaskCreate(vTaskDebug,   "Debug",   128, NULL, 1, NULL);
-	//xTaskCreate(vTaskRTC,   "RTC",   	 128, NULL, 1, NULL);
 	xTaskCreate(vTaskRGB,     "RGB",     128, NULL, 1, NULL);
-	
+
 	vTaskStartScheduler();
 	
 	while(1){
@@ -125,25 +123,9 @@ void vTaskDebug (void *argument)
 	}
 }
 
-/*
-void vTaskRTC (void *argument)
-{
-	uint32_t rtcBin = 10;
-	uint8_t  rtc_string[10];
-
-	while(1)
-	{
-		//rtcBin = RTC_TIME_Get(RTC);
-		i32toa_fixlen(rtcBin, rtc_string, 10);
-		LCD_SetCursor(1, 5);
-		LCD_SendString(rtc_string, 10);
-		
-		vTaskDelay(500);
-	}
-}*/
-
 void vTaskRGB (void *argument)
 {
+	uint16_t i;
 	while(1)
 	{
 		ULN_Enable(4);

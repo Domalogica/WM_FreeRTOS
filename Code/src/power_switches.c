@@ -1,7 +1,4 @@
-#include "stm32f1xx.h"
-#include "gpio.h"
 #include "power_switches.h"
-#include "error_handler.h"
 
 void TRIAC_PortInit(void)
 {

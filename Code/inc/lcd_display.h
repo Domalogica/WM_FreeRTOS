@@ -1,6 +1,9 @@
 #ifndef _LCD_DISPLAY_H_
 #define _LCD_DISPLAY_H_
 
+#include "stm32f1xx.h"
+#include "gpio.h"
+
 #define BISY_TIME       5000 //TODO: set min bisy time
 
 #define LCD_RS_PIN			GPIO_PIN_5

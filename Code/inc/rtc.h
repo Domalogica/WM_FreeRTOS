@@ -1,6 +1,8 @@
 #ifndef _RTC_H_
 #define _RTC_H_
 
+#include "stm32f1xx.h"
+
 // Values used for timeout 
 #define RTC_INITMODE_TIMEOUT         		1000U // 1s when tick set to 1ms
 #define RTC_SYNCHRO_TIMEOUT          		1000U // 1s when tick set to 1ms

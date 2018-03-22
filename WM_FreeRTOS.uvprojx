@@ -445,6 +445,11 @@
               <FileType>1</FileType>
               <FilePath>.\Code\src\uart.c</FilePath>
             </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

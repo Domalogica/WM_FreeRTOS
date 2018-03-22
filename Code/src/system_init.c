@@ -1,4 +1,3 @@
-#include "stm32f1xx.h"
 #include "system_init.h"
 
 void RCC_Init (void)

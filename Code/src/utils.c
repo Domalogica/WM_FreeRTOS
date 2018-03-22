@@ -1,4 +1,3 @@
-#include "stm32f1xx.h"
 #include "utils.h"
 
 uint16_t CRC16(uint8_t *pcBlock, uint16_t len)

@@ -1,5 +1,3 @@
-#include "stm32f1xx.h"
-#include "gpio.h"
 #include "lcd_display.h"
 
 void RS_GPIO_SET   (void);
