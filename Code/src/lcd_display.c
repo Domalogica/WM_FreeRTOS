@@ -257,7 +257,7 @@ void LCD_LightON (void)
 	GPIO_SetOutputPin  (LCD_LIGHT_PORT, GPIO_PIN_12);
 }
 
-void LCD_LightOff (void)
+void LCD_LightOFF (void)
 {
 	GPIO_ResetOutputPin(LCD_LIGHT_PORT, GPIO_PIN_12);
 }

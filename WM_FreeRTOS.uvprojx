@@ -450,6 +450,11 @@
               <FileType>1</FileType>
               <FilePath>.\Code\src\spi.c</FilePath>
             </File>
+            <File>
+              <FileName>rgb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\rgb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

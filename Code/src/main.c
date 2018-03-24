@@ -8,12 +8,15 @@
 #include "power_switches.h"
 #include "lcd_display.h"
 #include "system_init.h"
-//#include "rtc.h"
 #include "utils.h"
 #include "uart.h"
+#include "spi.h"
+#include "rgb.h"
+//#include "rtc.h"
 
 void vTaskDefault	(void *argument);
-void vTaskUart		(void *argument);
+void vTaskUART		(void *argument);
+void vTaskSPI	  	(void *argument);
 void vTaskTriac	 	(void *argument);
 void vTaskDebug 	(void *argument);
 void vTaskRGB 		(void *argument);
@@ -21,16 +24,17 @@ void vTaskRGB 		(void *argument);
 int main (void)
 {
 	RCC_Init();
-	//MCO_out(); Debug frequency testing (PIN_A8)
+	//MCO_out(); Frequency testing (PIN_A8)
 	GPIO_Init();
 	UART3_Init();
+	SPI2_Init();
 	TRIAC_PortInit();
 	MOSFET_PortInit();
 	ULN_PortInit();
 
-
 	xTaskCreate(vTaskDefault, "Default", 128, NULL, 1, NULL);
-	xTaskCreate(vTaskUart,    "Uart",    128, NULL, 1, NULL);
+	xTaskCreate(vTaskUART,    "UART",    128, NULL, 1, NULL);
+	xTaskCreate(vTaskSPI,     "SPI",     128, NULL, 1, NULL);
 	xTaskCreate(vTaskTriac,   "Triac",   128, NULL, 1, NULL);
 	xTaskCreate(vTaskDebug,   "Debug",   128, NULL, 1, NULL);
 	xTaskCreate(vTaskRGB,     "RGB",     128, NULL, 1, NULL);
@@ -49,7 +53,7 @@ void vTaskDefault (void *argument)
 	LCD_Clear();
 	LCD_SetCursor(0, 1);
 	LCD_SendString((uint8_t*)"WM_FreeRTOS (CMIS)", 18);
-	
+
 	while(1)
 	{
 		GPIO_SetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
@@ -59,12 +63,21 @@ void vTaskDefault (void *argument)
 	}
 }
 
-void vTaskUart (void *argument)
+void vTaskSPI (void *argument)
 {
-
 	while(1)
 	{
-		vTaskDelay(500);
+		vTaskDelay(10);	
+		SPI2_WriteData(0x1234);
+	}
+}
+
+void vTaskUART (void *argument)
+{
+	while(1)
+	{
+		vTaskDelay(1000);
+		//USART3_Send_String ((uint8_t*)"Debug\n\r");		
 	}
 }
 
@@ -119,27 +132,27 @@ void vTaskDebug (void *argument)
 		//vTaskDelay(20);
 		//GPIO_ResetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
 		vTaskDelay(3000);
-		//USART3_Send_String ((uint8_t*)"Debug\n\r");
 	}
 }
 
 void vTaskRGB (void *argument)
 {
-	uint16_t i;
+	uint16_t switch_time = 2000;
+	
 	while(1)
 	{
-		ULN_Enable(4);
-		vTaskDelay(1000);
-		ULN_Enable(5);
-		vTaskDelay(1000);
-		ULN_Enable(6);
-		vTaskDelay(1000);
-		ULN_Disable(5);
-		vTaskDelay(1000);
-		ULN_Disable(4);
-		vTaskDelay(1000);
-		ULN_Enable(5);
-		vTaskDelay(1000);
-		ULN_Disable(6);
+		RGB_ColorSet(LED_GREEN);
+		vTaskDelay(switch_time);
+		RGB_ColorSet(LED_RED);
+		vTaskDelay(switch_time);
+		RGB_ColorSet(LED_BLUE);
+		vTaskDelay(switch_time);
+		RGB_ColorSet(LED_YELOW);
+		vTaskDelay(switch_time);
+		RGB_ColorSet(LED_MAGENTA);
+		vTaskDelay(switch_time);
+		RGB_ColorSet(LED_CYAN);
+		vTaskDelay(switch_time);
+		RGB_ColorSet(LED_WHITE);
 	}
 }

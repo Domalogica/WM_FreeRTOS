@@ -24,7 +24,7 @@ void LCD_SendChar 	 (uint8_t data);
 void LCD_SendString  (uint8_t *str, uint8_t size);
 void LCD_SetCursor 	 (uint8_t row, uint8_t col);
 void LCD_LightON (void);
-void LCD_LightOff (void);
+void LCD_LightOFF (void);
 uint8_t LCD_GetRusChar(uint8_t num);
 
 #endif //_LCD_DISPLAY_H_
