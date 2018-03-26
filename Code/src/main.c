@@ -12,9 +12,11 @@
 #include "uart.h"
 #include "spi.h"
 #include "rgb.h"
+#include "gpio_it.h"
 //#include "rtc.h"
 
 void vTaskDefault	(void *argument);
+void vTaskFLM 		(void *argument);
 void vTaskUART		(void *argument);
 void vTaskSPI	  	(void *argument);
 void vTaskTriac	 	(void *argument);
@@ -31,8 +33,11 @@ int main (void)
 	TRIAC_PortInit();
 	MOSFET_PortInit();
 	ULN_PortInit();
+	GPIO_FLM_InitIT();
+	FLM_ResetData();
 
 	xTaskCreate(vTaskDefault, "Default", 128, NULL, 1, NULL);
+	xTaskCreate(vTaskFLM,     "FLM",     128, NULL, 2, NULL);
 	xTaskCreate(vTaskUART,    "UART",    128, NULL, 1, NULL);
 	xTaskCreate(vTaskSPI,     "SPI",     128, NULL, 1, NULL);
 	xTaskCreate(vTaskTriac,   "Triac",   128, NULL, 1, NULL);
@@ -48,18 +53,46 @@ int main (void)
 
 void vTaskDefault (void *argument)
 {
-	vTaskDelay(10);
-	LCD_Init();
-	LCD_Clear();
-	LCD_SetCursor(0, 1);
-	LCD_SendString((uint8_t*)"WM_FreeRTOS (CMIS)", 18);
-
 	while(1)
 	{
 		GPIO_SetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
 		vTaskDelay(500);
 		GPIO_ResetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
 		vTaskDelay(500);
+	}
+}
+
+void vTaskFLM (void *argument)
+{
+	FML_data fml_data_struct; 
+	
+	uint8_t str1[3];
+	uint8_t str2[3];
+	uint8_t str3[3];
+	uint8_t str4[3];
+	
+	while(1)
+	{
+		fml_data_struct = FLM_GetData();
+		i32toa_fixlen(fml_data_struct.FML1, str1, 3);
+		i32toa_fixlen(fml_data_struct.FML2, str2, 3);
+		i32toa_fixlen(fml_data_struct.FML3, str3, 3);
+		i32toa_fixlen(fml_data_struct.FML4, str4, 3);
+		/*
+		if (fml_data_struct.FML1 | fml_data_struct.FML2 | fml_data_struct.FML3 | fml_data_struct.FML4)
+		{*/
+			USART3_Send_String (str1); 
+			USART3_Send_String ((uint8_t*)"  ");
+			USART3_Send_String (str2); 
+			USART3_Send_String ((uint8_t*)"  ");
+			USART3_Send_String (str3); 
+			USART3_Send_String ((uint8_t*)"  ");
+			USART3_Send_String (str4); 
+			USART3_Send_String ((uint8_t*)"\r");
+		//}
+		
+		FLM_ResetData();
+		vTaskDelay(1000);	
 	}
 }
 
@@ -126,18 +159,26 @@ void vTaskTriac (void *argument)
 
 void vTaskDebug (void *argument)
 {
+	vTaskDelay(100);
+	LCD_Init();
+	LCD_Clear();
+	LCD_SetCursor(0, 1);
+	LCD_SendString((uint8_t*)"WM_FreeRTOS (CMIS)", 18);
+
 	while(1)
-	{	
-		//GPIO_SetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
-		//vTaskDelay(20);
-		//GPIO_ResetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
-		vTaskDelay(3000);
+	{
+		LCD_SetCursor(1, 5);
+		LCD_SendString((uint8_t*)"DEBUG MODE", 10);
+		vTaskDelay(1000);
+		LCD_SetCursor(1, 5);
+		LCD_SendString((uint8_t*)"          ", 10);
+		vTaskDelay(1000);
 	}
 }
 
 void vTaskRGB (void *argument)
 {
-	uint16_t switch_time = 2000;
+	uint16_t switch_time = 1500;
 	
 	while(1)
 	{

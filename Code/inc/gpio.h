@@ -82,7 +82,7 @@
 #define GPIO_AF_EXTI_PORTF            (uint32_t)5   /*!< EXTI PORT F */
 #define GPIO_AF_EXTI_PORTG            (uint32_t)6   /*!< EXTI PORT G */
 
-//GPIO_LL_EC_EXTI_LINE GPIO EXTI LINE
+//GPIO_EC_EXTI_LINE GPIO EXTI LINE
 #define GPIO_AF_EXTI_LINE0            (uint32_t)(0x000FU << 16 | 0)  /*!< EXTI_POSITION_0  | EXTICR[0] */
 #define GPIO_AF_EXTI_LINE1            (uint32_t)(0x00F0U << 16 | 0)  /*!< EXTI_POSITION_4  | EXTICR[0] */
 #define GPIO_AF_EXTI_LINE2            (uint32_t)(0x0F00U << 16 | 0)  /*!< EXTI_POSITION_8  | EXTICR[0] */

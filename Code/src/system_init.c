@@ -25,6 +25,8 @@ void RCC_Init (void)
 	RCC->CFGR &= ~RCC_CFGR_SW;                   							 	// clear SW bits
   RCC->CFGR |= RCC_CFGR_SW_PLL;                 							// select source SYSCLK = PLL
 	while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_1) {} 			// wait till PLL is used
+		
+	//NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
 }
 
 void MCO_out (void)
