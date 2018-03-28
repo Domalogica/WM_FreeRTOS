@@ -1,3 +1,4 @@
+#include "gpio.h"
 #include "gpio_user.h"
 
 void GPIO_Init (void)

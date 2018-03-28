@@ -2,7 +2,7 @@
 #define _RGB_H_
 
 #include "stm32f1xx.h"
-#include "power_switches.h"
+#include "power_switch.h"
 
 //private
 #define LED_GREEN_POS			6

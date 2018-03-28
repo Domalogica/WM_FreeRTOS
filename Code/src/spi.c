@@ -29,17 +29,6 @@ void SPI1_Init(void)
 	SPI1->CR1 |= SPI_CR1_SPE;               //Enable SPI1 
 }
 
-uint16_t SPI1_WriteData(uint16_t data)
-{
-	while(!(SPI1->SR & SPI_SR_TXE));
-	//TODO: CS_ON      
-	SPI1->DR = data;  											//Send data
-	while(!(SPI1->SR & SPI_SR_RXNE));				//Waiting for an answer
-	data = SPI1->DR;  											//Recive data
-	//TODO: CS_OFF  
-  return data;  
-}
-
 void SPI2_Init(void)
 {
 	RCC->APB2ENR  |= RCC_APB2ENR_IOPBEN;		//Clock source port B enable 
@@ -67,6 +56,17 @@ void SPI2_Init(void)
 
 	SPI2->CR1 |= SPI_CR1_MSTR;              //Mode Master
 	SPI2->CR1 |= SPI_CR1_SPE;               //Enable SPI2
+}
+
+uint16_t SPI1_WriteData(uint16_t data)
+{
+	while(!(SPI1->SR & SPI_SR_TXE));
+	//TODO: CS_ON      
+	SPI1->DR = data;  											//Send data
+	while(!(SPI1->SR & SPI_SR_RXNE));				//Waiting for an answer
+	data = SPI1->DR;  											//Recive data
+	//TODO: CS_OFF  
+  return data;  
 }
 
 uint16_t SPI2_WriteData(uint16_t data)

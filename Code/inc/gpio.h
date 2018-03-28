@@ -1,6 +1,8 @@
 #ifndef _GPIO_H_
 #define _GPIO_H_
 
+#include "stm32f1xx.h"
+
 //GPIO_PIN PIN
 #define GPIO_PIN_0                      (GPIO_BSRR_BS0 << 8)  | 0x00000001U  /*!< Select pin 0 */
 #define GPIO_PIN_1                      (GPIO_BSRR_BS1 << 8)  | 0x00000002U  /*!< Select pin 1 */
@@ -32,8 +34,7 @@
 #define GPIO_MODE_OUTPUT              GPIO_CRL_MODE0_0   /*!< Select general purpose output mode */
 #define GPIO_MODE_ALTERNATE           (GPIO_CRL_CNF0_1 | GPIO_CRL_MODE0_0) /*!< Select alternate function mode */
 
-
-// GPIO_OUTPUT Output Type
+//GPIO_OUTPUT Output Type
 #define GPIO_OUTPUT_PUSHPULL          0x00000000U /*!< Select push-pull as output type */
 #define GPIO_OUTPUT_OPENDRAIN         GPIO_CRL_CNF0_0 /*!< Select open-drain as output type */
 
@@ -46,7 +47,6 @@
 #define GPIO_PULL_NO                  (0x00000000U)  /*!< Select I/O no pull */
 #define GPIO_PULL_DOWN                (0x00000000U)    /*!< Select I/O pull down */
 #define GPIO_PULL_UP                  GPIO_ODR_ODR0  /*!< Select I/O pull up */
-
 
 //GPIO_EVENTOUT_PIN EVENTOUT Pin
 #define GPIO_AF_EVENTOUT_PIN_0        AFIO_EVCR_PIN_PX0   /*!< EVENTOUT on pin 0 */
@@ -121,8 +121,8 @@
 
 //**********************************************************************************************************
 
-//GPIO_Functions and Port_Configuration
-/* @note   I/O mode can be Analog, Floating input, Input with pull-up/pull-down, 
+/* GPIO_Functions and Port_Configuration
+   @note   I/O mode can be Analog, Floating input, Input with pull-up/pull-down, 
 					 General purpose Output, Alternate function Output.
    @param  Pin This parameter can be one of the following values:
            GPIO_PIN_0,  GPIO_PIN_1,  GPIO_PIN_2,  GPIO_PIN_3,
@@ -150,14 +150,12 @@ __STATIC_INLINE void GPIO_SetPinMode(GPIO_TypeDef *GPIOx, uint32_t Pin, uint32_t
   MODIFY_REG(*pReg, ((GPIO_CRL_CNF0|GPIO_CRL_MODE0) << (POSITION_VAL(Pin) * 4U)), (Mode << (POSITION_VAL(Pin) * 4U)));
 }
 
-
 //	Return gpio mode for a dedicated pin on dedicated port.
 __STATIC_INLINE uint32_t GPIO_GetPinMode(GPIO_TypeDef *GPIOx, uint32_t Pin)
 {
   register uint32_t *pReg = (uint32_t *)((uint32_t)((uint32_t)(&GPIOx->CRL) + (Pin>>24)));
   return (uint32_t)(READ_BIT(*pReg, ((GPIO_CRL_CNF0|GPIO_CRL_MODE0) << (POSITION_VAL(Pin) * 4U))) >> (POSITION_VAL(Pin) * 4U));
 }
-
 
 //	Speed This parameter can be one of the following values:
 __STATIC_INLINE void GPIO_SetPinSpeed(GPIO_TypeDef *GPIOx, uint32_t Pin, uint32_t  Speed)
@@ -166,7 +164,6 @@ __STATIC_INLINE void GPIO_SetPinSpeed(GPIO_TypeDef *GPIOx, uint32_t Pin, uint32_
   MODIFY_REG(*pReg, (GPIO_CRL_MODE0 << (POSITION_VAL(Pin) * 4U)), (Speed << (POSITION_VAL(Pin) * 4U)));
 }
 
-
 //	Returned value can be one of the following values:
 __STATIC_INLINE uint32_t GPIO_GetPinSpeed(GPIO_TypeDef *GPIOx, uint32_t Pin)
 {
@@ -174,14 +171,12 @@ __STATIC_INLINE uint32_t GPIO_GetPinSpeed(GPIO_TypeDef *GPIOx, uint32_t Pin)
   return (uint32_t)(READ_BIT(*pReg, (GPIO_CRL_MODE0 << (POSITION_VAL(Pin) * 4U))) >> (POSITION_VAL(Pin) * 4U));
 }
 
-
 //OutputType This parameter can be one of the following values:
 __STATIC_INLINE void GPIO_SetPinOutputType(GPIO_TypeDef *GPIOx, uint32_t Pin, uint32_t OutputType)
 {
   register uint32_t *pReg = (uint32_t *)((uint32_t)((uint32_t)(&GPIOx->CRL) + (Pin>>24)));
   MODIFY_REG(*pReg, (GPIO_CRL_CNF0_0 << (POSITION_VAL(Pin) * 4U)), (OutputType << (POSITION_VAL(Pin) * 4U)));
 }
-
 
 //	Returned value can be one of the following values:
 //	@arg GPIO_OUTPUT_PUSHPULL
@@ -193,7 +188,6 @@ __STATIC_INLINE uint32_t GPIO_GetPinOutputType(GPIO_TypeDef *GPIOx, uint32_t Pin
 
 }
 
-
 //	Pull This parameter can be one of the following values:
 //	@arg GPIO_PULL_DOWN
 //	@arg GPIO_PULL_UP
@@ -201,7 +195,6 @@ __STATIC_INLINE void GPIO_SetPinPull(GPIO_TypeDef *GPIOx, uint32_t Pin, uint32_t
 {
   MODIFY_REG(GPIOx->ODR, (Pin>>8) , Pull << (POSITION_VAL(Pin>>8)));
 }
-
 
 //	Warning: only one pin can be passed as parameter.
 //	Returned value can be one of the following values:
@@ -211,7 +204,6 @@ __STATIC_INLINE uint32_t GPIO_GetPinPull(GPIO_TypeDef *GPIOx, uint32_t Pin)
 {
   return (uint32_t)(READ_BIT(GPIOx->ODR, (GPIO_ODR_ODR0 << (POSITION_VAL(Pin>>8)))) >> (POSITION_VAL(Pin>>8)));
 }
-
 
 //	Lock configuration of several pins for a dedicated port.
 __STATIC_INLINE void GPIO_LockPin(GPIO_TypeDef *GPIOx, uint32_t PinMask)
@@ -224,13 +216,11 @@ __STATIC_INLINE void GPIO_LockPin(GPIO_TypeDef *GPIOx, uint32_t PinMask)
   (void) temp;
 }
 
-
 //	Return 1 if all pins passed as parameter, of a dedicated port, are locked. else Return 0.
   __STATIC_INLINE uint32_t GPIO_IsPinLocked(GPIO_TypeDef *GPIOx, uint32_t PinMask)
 {
   return (READ_BIT(GPIOx->LCKR, ((PinMask >> 8 ) & 0x0000FFFFU)) == ((PinMask >>8 ) & 0x0000FFFFU));
 }
-
 
 //	Return 1 if one of the pin of a dedicated port is locked. else return 0.
 __STATIC_INLINE uint32_t GPIO_IsAnyPinLocked(GPIO_TypeDef *GPIOx)
@@ -238,13 +228,11 @@ __STATIC_INLINE uint32_t GPIO_IsAnyPinLocked(GPIO_TypeDef *GPIOx)
   return (READ_BIT(GPIOx->LCKR, GPIO_LCKR_LCKK) == (GPIO_LCKR_LCKK));
 }
 
-
 //	Return full input data register value for a dedicated port.
 __STATIC_INLINE uint32_t GPIO_ReadInputPort(GPIO_TypeDef *GPIOx)
 {
   return (uint32_t)(READ_REG(GPIOx->IDR));
 }
-
 
 //	Return if input data level for several pins of dedicated port is high or low.
 //	Return state of bit (1 or 0)
@@ -253,20 +241,17 @@ __STATIC_INLINE uint32_t GPIO_IsInputPinSet(GPIO_TypeDef *GPIOx, uint32_t PinMas
   return (READ_BIT(GPIOx->IDR, (PinMask >> 8 ) & 0x0000FFFFU) == ((PinMask >> 8 ) & 0x0000FFFFU));
 }
 
-
 //	Write output data register for the port.
 __STATIC_INLINE void GPIO_WriteOutputPort(GPIO_TypeDef *GPIOx, uint32_t PortValue)
 {
   WRITE_REG(GPIOx->ODR, PortValue);
 }
 
-
 //	Return full output data register value for a dedicated port.
 __STATIC_INLINE uint32_t GPIO_ReadOutputPort(GPIO_TypeDef *GPIOx)
 {
   return (uint32_t)(READ_REG(GPIOx->ODR));
 }
-
 
 //	Return if input data level for several pins of dedicated port is high or low.
 //	Return state of bit (1 or 0).
@@ -275,20 +260,17 @@ __STATIC_INLINE uint32_t GPIO_IsOutputPinSet(GPIO_TypeDef *GPIOx, uint32_t PinMa
   return (READ_BIT(GPIOx->ODR, (PinMask >> 8 ) & 0x0000FFFFU) == ((PinMask >> 8 ) & 0x0000FFFFU));
 }
 
-
 // Set several pins to high level on dedicated gpio port.
 __STATIC_INLINE void GPIO_SetOutputPin(GPIO_TypeDef *GPIOx, uint32_t PinMask)
 {
   WRITE_REG(GPIOx->BSRR, (PinMask >> 8) & 0x0000FFFFU);
 }
 
-
 //	Set several pins to low level on dedicated gpio port.
 __STATIC_INLINE void GPIO_ResetOutputPin(GPIO_TypeDef *GPIOx, uint32_t PinMask)
 {
   WRITE_REG(GPIOx->BRR, (PinMask >> 8 ) & 0x0000FFFFU);
 }
-
 
 //	Toggle data value for several pin of dedicated port.
 __STATIC_INLINE void GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint32_t PinMask)

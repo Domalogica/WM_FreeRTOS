@@ -406,11 +406,6 @@
               <FilePath>.\Code\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>power_switches.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\src\power_switches.c</FilePath>
-            </File>
-            <File>
               <FileName>gpio_user.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\src\gpio_user.c</FilePath>
@@ -451,9 +446,14 @@
               <FilePath>.\Code\src\rgb.c</FilePath>
             </File>
             <File>
-              <FileName>gpio_it.c</FileName>
+              <FileName>fml.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\gpio_it.c</FilePath>
+              <FilePath>.\Code\src\fml.c</FilePath>
+            </File>
+            <File>
+              <FileName>power_switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\power_switch.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,4 +1,4 @@
-#include "power_switches.h"
+#include "power_switch.h"
 
 void TRIAC_PortInit(void)
 {

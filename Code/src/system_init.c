@@ -12,12 +12,12 @@ void RCC_Init (void)
 	RCC->CFGR |= RCC_CFGR_PPRE2_DIV1;														// APB2 = HCLK/1
 	
 	RCC->CFGR &= ~RCC_CFGR_PLLMULL;               							// clear PLLMULL bits
-	RCC->CFGR &= ~RCC_CFGR_PLLSRC;															// clearn PLLSRC bits
-	RCC->CFGR &= ~RCC_CFGR_PLLXTPRE;														// clearn PLLXTPRE bits
+	RCC->CFGR &= ~RCC_CFGR_PLLSRC;															// clear PLLSRC bits
+	RCC->CFGR &= ~RCC_CFGR_PLLXTPRE;														// clear PLLXTPRE bits
 	
 	RCC->CFGR |= RCC_CFGR_PLLSRC; 															// source HSE
-	RCC->CFGR |= RCC_CFGR_PLLXTPRE_HSE; 												// source HSE/2 = 4 MHz  //RCC_CFGR_PLLXTPRE_HSE_DIV2
-	RCC->CFGR |= RCC_CFGR_PLLMULL9; 														// PLL x6: clock = 4 MHz * 6 = 24 MHz
+	RCC->CFGR |= RCC_CFGR_PLLXTPRE_HSE; 												// source HSE/2 = 4 MHz  --> HSE clock not divided
+	RCC->CFGR |= RCC_CFGR_PLLMULL9; 														// PLL x9: clock = 8 MHz * 9 = 72 MHz
 
 	RCC->CR |= RCC_CR_PLLON;                      							// enable PLL
 	while((RCC->CR & RCC_CR_PLLRDY) == 0) {}      							// wait till PLL is ready
@@ -26,7 +26,6 @@ void RCC_Init (void)
   RCC->CFGR |= RCC_CFGR_SW_PLL;                 							// select source SYSCLK = PLL
 	while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_1) {} 			// wait till PLL is used
 		
-	//NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
 }
 
 void MCO_out (void)

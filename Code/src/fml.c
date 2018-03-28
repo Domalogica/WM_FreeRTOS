@@ -1,4 +1,4 @@
-#include "gpio_it.h"
+#include "fml.h"
 
 FML_data fml_data; 
 
@@ -73,7 +73,7 @@ void FLM_ResetData(void)
 	fml_data.FML4 = 0;
 } 
 
-uint16_t FLM_GetTic(uint8_t fml_num)
+uint32_t FLM_GetTic(uint8_t fml_num)
 {
 	return 	(fml_num == 1) ? fml_data.FML1 : 
 					(fml_num == 2) ? fml_data.FML2 : 
@@ -92,7 +92,6 @@ void FLM_ResetTic(uint8_t fml_num)
 	}
 } 
 
-//Interrupts
 void EXTI0_IRQHandler(void)
 {
 	if(EXTI->PR & EXTI_IMR_MR0)
