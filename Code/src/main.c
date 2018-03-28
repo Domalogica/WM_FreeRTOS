@@ -13,7 +13,6 @@
 #include "spi.h"
 #include "rgb.h"
 #include "gpio_it.h"
-//#include "rtc.h"
 
 void vTaskDefault	(void *argument);
 void vTaskFLM 		(void *argument);
@@ -78,21 +77,18 @@ void vTaskFLM (void *argument)
 		i32toa_fixlen(fml_data_struct.FML2, str2, 3);
 		i32toa_fixlen(fml_data_struct.FML3, str3, 3);
 		i32toa_fixlen(fml_data_struct.FML4, str4, 3);
-		/*
-		if (fml_data_struct.FML1 | fml_data_struct.FML2 | fml_data_struct.FML3 | fml_data_struct.FML4)
-		{*/
-			USART3_Send_String (str1); 
-			USART3_Send_String ((uint8_t*)"  ");
-			USART3_Send_String (str2); 
-			USART3_Send_String ((uint8_t*)"  ");
-			USART3_Send_String (str3); 
-			USART3_Send_String ((uint8_t*)"  ");
-			USART3_Send_String (str4); 
-			USART3_Send_String ((uint8_t*)"\r");
-		//}
-		
+
+		USART3_Send_String (str1); 
+		USART3_Send_String ((uint8_t*)"  ");
+		USART3_Send_String (str2); 
+		USART3_Send_String ((uint8_t*)"  ");
+		USART3_Send_String (str3); 
+		USART3_Send_String ((uint8_t*)"  ");
+		USART3_Send_String (str4); 
+		USART3_Send_String ((uint8_t*)"\r");
+
 		FLM_ResetData();
-		vTaskDelay(1000);	
+		vTaskDelay(100);	
 	}
 }
 
@@ -164,7 +160,7 @@ void vTaskDebug (void *argument)
 	LCD_Clear();
 	LCD_SetCursor(0, 1);
 	LCD_SendString((uint8_t*)"WM_FreeRTOS (CMIS)", 18);
-
+	
 	while(1)
 	{
 		LCD_SetCursor(1, 5);
@@ -172,14 +168,14 @@ void vTaskDebug (void *argument)
 		vTaskDelay(1000);
 		LCD_SetCursor(1, 5);
 		LCD_SendString((uint8_t*)"          ", 10);
-		vTaskDelay(1000);
+		vTaskDelay(1000); 
 	}
 }
 
 void vTaskRGB (void *argument)
 {
-	uint16_t switch_time = 1500;
-	
+	uint16_t switch_time  = 1000;
+
 	while(1)
 	{
 		RGB_ColorSet(LED_GREEN);

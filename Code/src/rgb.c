@@ -31,7 +31,7 @@ int8_t RGB_ColorSet (uint8_t color)
 						ULN_Enable (LED_BLUE_POS); 
 						ULN_Enable (LED_RED_POS);
 						break;  
-		case 8: ULN_Disable (LED_GREEN_POS); 
+		case 8: ULN_Disable(LED_GREEN_POS); 
 						ULN_Disable(LED_BLUE_POS); 
 						ULN_Disable(LED_RED_POS);
 						break;  						
