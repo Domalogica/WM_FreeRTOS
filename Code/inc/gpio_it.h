@@ -1,34 +1,13 @@
-#ifndef _GPIO_IT_H_
-#define _GPIO_IT_H_
+#ifndef _INTERRUPT_H_
+#define _INTERRUPT_H_
 
 #include "stm32f1xx.h"
 #include "gpio.h"
-#include "err_handler.h"
+#include "gpio_us.h"
+#include "fml.h"
+#include "bill_acceptor.h"
 
-typedef struct
-{
-	uint32_t FML1;
-	uint32_t FML2;
-	uint32_t FML3;
-	uint32_t FML4;
-} FML_data;
-
-void GPIO_FLM_InitIT(void);
-void FLM_ResetData(void);
-void FLM_ResetTic(uint8_t fml_num);
-
-FML_data FLM_GetData(void);
-uint32_t FLM_GetTic(uint8_t fml_num);
-
-
-#define FLM_1                					1
-#define FLM_2                					2
-#define FLM_3                					3
-#define FLM_4                					4
-
-#define EXTI_MODE_IT                 ((uint8_t)0x00) /*!< Interrupt Mode */
-#define EXTI_MODE_EVENT              ((uint8_t)0x01) /*!< Event Mode */
-#define EXTI_MODE_IT_EVENT           ((uint8_t)0x02) /*!< Interrupt & Event Mode */
+void IRQ_Init(void);
 
 #define GPIO_AF_EXTI_PORTA            (uint32_t)0   /*!< EXTI PORT A */
 #define GPIO_AF_EXTI_PORTB            (uint32_t)1   /*!< EXTI PORT B */
@@ -77,4 +56,4 @@ uint32_t FLM_GetTic(uint8_t fml_num);
 #define EXTI_LINE_14                EXTI_IMR_IM14          /*!< Extended line 14 */
 #define EXTI_LINE_15                EXTI_IMR_IM15          /*!< Extended line 15 */
 
-#endif //_GPIO_IT_H_
+#endif //_INTERRUPT_H_

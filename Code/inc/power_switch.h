@@ -3,7 +3,17 @@
 
 #include "stm32f1xx.h"
 #include "gpio.h"
-#include "error_handler.h"
+#include "err_handler.h"
+
+#define 	TR_WATER_SUPPLY			1
+#define 	TR_WATER_DELIVERY		4
+#define 	TR_WATER_PUMP				7
+#define   TR_OSMOS_WASHING		2
+#define 	TR_DISPENSER				8
+#define 	TR_DRAINAGE					9
+
+#define 	MF_WATER_PUMP				1
+
 
 #if defined(STM32F103xE)
 

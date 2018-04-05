@@ -1,4 +1,9 @@
 #include "uart.h"
+#include "power_switch.h"
+
+extern uint16_t dispenser;
+extern uint16_t drainage;
+extern uint16_t outValve;
 
 void UART1_Init (void)
 {
@@ -143,6 +148,45 @@ void USART3_IRQHandler (void)
 	if(USART3->SR & USART_SR_RXNE)
 	{
 		USART3->SR &= ~USART_SR_RXNE;			//Clear IRQ flag
+		/*
+		if(USART3->DR == 0x2B)
+		{
+			if(dispenser < 5000)dispenser++;
+
+		}
+		
+		if(USART3->DR == 0x2D)
+		{
+			if (dispenser > 0) dispenser--; 
+		}
+		*/
+		/*
+		if(USART3->DR == '2')
+		{
+			if(drainage == 1)
+			{
+				drainage = 0;
+				TRIAC_Disable(DRAINAGE_TRIAC);
+			}	
+			else
+			{
+				drainage = 1;
+				TRIAC_Enable(DRAINAGE_TRIAC);
+			}
+		}
+		if(USART3->DR == '3')
+		{
+			if(outValve == 1) 
+			{
+				outValve = 0;
+				TRIAC_Disable(OUTPUT_VALVE_TRIAC);
+			}
+			else 
+			{
+				outValve = 1;
+				TRIAC_Enable(OUTPUT_VALVE_TRIAC);
+			}
+		}*/
 		//TODO: USART3->DR recieve data
 		//Example if(USART3->DR == '0') actions
 		//        if(USART3->DR == '1') actions

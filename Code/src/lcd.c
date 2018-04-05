@@ -1,4 +1,4 @@
-#include "lcd_display.h"
+#include "lcd.h"
 
 void RS_GPIO_SET   (void);
 void RS_GPIO_RESET (void);

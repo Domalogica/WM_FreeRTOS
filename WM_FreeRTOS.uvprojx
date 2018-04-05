@@ -406,29 +406,29 @@
               <FilePath>.\Code\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>gpio_user.c</FileName>
+              <FileName>system.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\gpio_user.c</FilePath>
+              <FilePath>.\Code\src\system.c</FilePath>
             </File>
             <File>
-              <FileName>error_handler.c</FileName>
+              <FileName>gpio_us.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\error_handler.c</FilePath>
+              <FilePath>.\Code\src\gpio_us.c</FilePath>
             </File>
             <File>
-              <FileName>utils.c</FileName>
+              <FileName>gpio_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\utils.c</FilePath>
+              <FilePath>.\Code\src\gpio_it.c</FilePath>
             </File>
             <File>
-              <FileName>lcd_display.c</FileName>
+              <FileName>lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\lcd_display.c</FilePath>
+              <FilePath>.\Code\src\lcd.c</FilePath>
             </File>
             <File>
-              <FileName>system_init.c</FileName>
+              <FileName>fml.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\system_init.c</FilePath>
+              <FilePath>.\Code\src\fml.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
@@ -446,14 +446,29 @@
               <FilePath>.\Code\src\rgb.c</FilePath>
             </File>
             <File>
-              <FileName>fml.c</FileName>
+              <FileName>utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Code\src\fml.c</FilePath>
+              <FilePath>.\Code\src\utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>bill_acceptor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\bill_acceptor.c</FilePath>
             </File>
             <File>
               <FileName>power_switch.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\src\power_switch.c</FilePath>
+            </File>
+            <File>
+              <FileName>err_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\err_handler.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\adc.c</FilePath>
             </File>
           </Files>
         </Group>
