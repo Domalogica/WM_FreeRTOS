@@ -210,6 +210,7 @@ void vTaskKey (void *argument)
 		if(Is_ButtonRight())
 		{
 			fail_hydraSystem = 0; //Сброс аварии
+			GPIO_ResetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
 		}
 		vTaskDelay(150);
 	}
@@ -322,6 +323,7 @@ void vTaskLCD (void *argument)
 			LCD_SendString(osmos_flag, 2); 
 			LCD_SendString((uint8_t*)"   ", 3); 
 			LCD_SendString(mess_err, 6); 
+			GPIO_SetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
 		}else
 		{
 			Int16ToString(dispenser_mode, disp_mode, 2);
@@ -333,7 +335,6 @@ void vTaskLCD (void *argument)
 			LCD_SendString(osmos_flag, 2); 
 			LCD_SendString((uint8_t*)"   ", 3); 
 			LCD_SendString(mess_ok, 6); 
-		
 		}
 		vTaskDelay(300);	
 	}
