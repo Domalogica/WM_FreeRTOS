@@ -20,6 +20,10 @@
 	#define PIN_OUTPUT_PRESS_SENSOR		GPIO_PIN_7
 	#define DATA_OUTPUT_PRESS_SENSOR  GPIO_IDR_IDR7
 	
+	#define PORT_DRAINAGE_FLOW        GPIOF
+	#define PIN_DRAINAGE_FLOW					GPIO_PIN_8
+	#define DATA_DRAINAGE_FLOW 				GPIO_IDR_IDR8
+	
 	#define PORT_BUTTON_DOWN  				GPIOC
 	#define PIN_BUTTON_DOWN						GPIO_PIN_13
 	#define DATA_BUTTON_DOWN  				GPIO_IDR_IDR13
@@ -41,6 +45,8 @@
 void GPIO_Init (void);
 uint8_t Is_InPressSensor(void);
 uint8_t Is_OutPressSensor(void);
+uint8_t Is_DrainageFlow(void);
+
 uint8_t Is_ButtonLeft(void);
 uint8_t Is_ButtonRight(void);
 uint8_t Is_ButtonUp(void);

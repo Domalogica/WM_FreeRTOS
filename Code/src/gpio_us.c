@@ -34,6 +34,9 @@ void GPIO_Init (void)
 	GPIO_SetPinMode(PORT_OUTPUT_PRESS_SENSOR, PIN_OUTPUT_PRESS_SENSOR, GPIO_MODE_INPUT);					//Out pressure
 	GPIO_SetPinPull(PORT_OUTPUT_PRESS_SENSOR, PIN_OUTPUT_PRESS_SENSOR, GPIO_PULL_UP);
 	
+	GPIO_SetPinMode(PORT_DRAINAGE_FLOW, PIN_DRAINAGE_FLOW, GPIO_MODE_INPUT);										  //Drainage flow
+	GPIO_SetPinPull(PORT_DRAINAGE_FLOW, PIN_DRAINAGE_FLOW, GPIO_PULL_UP);
+	
 	GPIO_SetPinMode(PORT_BUTTON_DOWN, PIN_BUTTON_DOWN, GPIO_MODE_INPUT);													//Button 1
 	GPIO_SetPinPull(PORT_BUTTON_DOWN, PIN_BUTTON_DOWN, GPIO_PULL_UP);
 	
@@ -56,6 +59,11 @@ uint8_t Is_InPressSensor(void)
 uint8_t Is_OutPressSensor(void)
 {
 	return (PORT_OUTPUT_PRESS_SENSOR->IDR & DATA_OUTPUT_PRESS_SENSOR) != 0;
+}
+
+uint8_t Is_DrainageFlow(void)
+{
+	return (PORT_DRAINAGE_FLOW->IDR & DATA_DRAINAGE_FLOW) != 0;
 }
 	
 uint8_t Is_ButtonLeft(void)
