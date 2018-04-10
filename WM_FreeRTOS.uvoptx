@@ -118,7 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>,сЇ</Name>
+          <Name>„т{</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -187,6 +187,11 @@
           <count>7</count>
           <WinNumber>1</WinNumber>
           <ItemText>dispenser_flag,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>test,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

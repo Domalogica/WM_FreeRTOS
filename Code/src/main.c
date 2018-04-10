@@ -32,6 +32,8 @@ uint8_t  fail_hydraSystem     = 0;
 uint8_t  active_status = 0;
 uint16_t drainage_switch_time = 0;
 uint16_t drainage_switch_time2 = 0;
+
+uint8_t  test     = 0;
 	
 int main (void)
 { 	
@@ -77,9 +79,10 @@ void vTaskDefault (void *argument)
 			{
 				TRIAC_Enable (TR_DRAINAGE);   //Открываем дренажный клапан
 			}
-			if (Is_DrainageFlow() && (drainage_switch_time > 200)) //Проверяем, сраболтал ли датчик потока после 10 сек
+			if (Is_DrainageFlow() && (drainage_switch_time > 600)) //Проверяем, сраболтал ли датчик потока после 15 сек
 			{
 				//Авария
+				test = 1;
 				TRIAC_Disable (TR_WATER_SUPPLY); //Закрываем входной клапан
 				TRIAC_Disable (TR_WATER_PUMP);	 //Выключаем насос
 				dispenser_flag = 0;							 //Отключаем дозатор	
@@ -92,6 +95,7 @@ void vTaskDefault (void *argument)
 			//MOSFET_Enable(MF_WATER_PUMP);
 		}else
 		{
+			test = 2; 
 			TRIAC_Disable (TR_WATER_SUPPLY);
 			TRIAC_Disable (TR_WATER_PUMP);
 			dispenser_flag = 0;	             //Отключаем дозатор
@@ -211,6 +215,7 @@ void vTaskKey (void *argument)
 		{
 			fail_hydraSystem = 0; //Сброс аварии
 			GPIO_ResetOutputPin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
+			test = 0;
 		}
 		vTaskDelay(150);
 	}
