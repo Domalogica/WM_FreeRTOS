@@ -475,6 +475,16 @@
               <FileType>1</FileType>
               <FilePath>.\Code\src\adc_us.c</FilePath>
             </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>timers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\src\timers.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

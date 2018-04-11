@@ -93,7 +93,7 @@ void EXTI2_IRQHandler(void)
 {
   if(EXTI->PR & EXTI_IMR_MR2)
 	{
-		fml_data.FML3++; 
+		fml_data.FML3++;
 		EXTI->PR = EXTI_IMR_MR2;
 	}
 }
@@ -102,7 +102,7 @@ void EXTI3_IRQHandler(void)
 {
 	if(EXTI->PR & EXTI_IMR_MR3)
 	{
-		fml_data.FML4++; 
+		fml_data.FML4++;
 		EXTI->PR = EXTI_IMR_MR3;
 	}
 }

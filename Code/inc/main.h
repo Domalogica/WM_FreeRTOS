@@ -2,8 +2,8 @@
 #define _MAIN_H_
 
 
-
-
+#define SERVICE_MODE			1
+#define NORMAL_MODE			  0
 
 
 

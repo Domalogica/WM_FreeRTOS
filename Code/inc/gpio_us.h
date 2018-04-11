@@ -45,7 +45,7 @@
 void GPIO_Init (void);
 uint8_t Is_InPressSensor(void);
 uint8_t Is_OutPressSensor(void);
-uint8_t Is_DrainageFlow(void);
+//uint8_t Is_DrainageFlow(void);
 
 uint8_t Is_ButtonLeft(void);
 uint8_t Is_ButtonRight(void);

@@ -20,11 +20,21 @@ void FLM_ResetTic(uint8_t fml_num);
 FML_data FLM_GetData(void);
 uint32_t FLM_GetTic(uint8_t fml_num);
 
-
 #define FLM_1                					1
 #define FLM_2                					2
 #define FLM_3                					3
 #define FLM_4                					4
+
+#define FLM_IN			       						FLM_1
+#define FLM_DRAINAGE  								FLM_2
+#define FLM_OUT       								FLM_3
+#define FML_NC               					FLM_4
+
+#define FLM_IN_COEF         					450.0
+#define FLM_DRAINAGE_COEF  						450.0
+#define FLM_OUT_COEF        					450.0
+#define FML_NC_COEF          					450.0
+
 
 #define EXTI_MODE_IT                 ((uint8_t)0x00) /*!< Interrupt Mode */
 #define EXTI_MODE_EVENT              ((uint8_t)0x01) /*!< Event Mode */
