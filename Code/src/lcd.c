@@ -43,6 +43,16 @@ void LCD_SendCommand (uint8_t command)
 	Delay(BISY_TIME);
 }
 
+void LCD_SendStringRus (uint8_t *str, uint8_t size){
+	for (int8_t i = 0; i < size; i++) 
+	{
+		if(str[i] < 0xC0)
+			LCD_SendChar(str[i]);
+		else
+			LCD_SendChar(LCD_GetRusChar(str[i]-0xC0));
+	}
+}
+
 void LCD_SendChar (uint8_t data)
 {
 	RS_GPIO_SET();

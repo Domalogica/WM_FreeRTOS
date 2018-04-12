@@ -21,6 +21,7 @@ void LCD_Clear (void);
 void LCD_Init  (void);
 void LCD_SendCommand (uint8_t command);
 void LCD_SendChar 	 (uint8_t data);
+void LCD_SendStringRus (uint8_t *str, uint8_t size);
 void LCD_SendString  (uint8_t *str, uint8_t size);
 void LCD_SetCursor 	 (uint8_t row, uint8_t col);
 void LCD_LightON (void);
