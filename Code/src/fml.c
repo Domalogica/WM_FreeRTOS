@@ -23,6 +23,15 @@ uint32_t FLM_GetTic(uint8_t fml_num)
 					(fml_num == 4) ? fml_data.FML4 : 0x00;
 }
 
+void FLM_SetTic(uint32_t fml1, uint32_t fml2,uint32_t fml3, uint32_t fml4)
+{
+	fml_data.FML1 = fml1;
+	fml_data.FML2 = fml2;
+	fml_data.FML3 = fml3;
+	fml_data.FML4 = fml4;
+}
+
+
 void FLM_ResetTic(uint8_t fml_num)
 {	
 	switch (fml_num){

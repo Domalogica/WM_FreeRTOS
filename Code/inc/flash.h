@@ -3,9 +3,13 @@
 
 #include "stm32f1xx.h"
 
-#define	IN_FML_DATA_ADRESS              0x08040000
-#define	OUT_FML_DATA_ADRESS             0x08040004
-#define	DRAIN_FML_DATA_ADRESS           0x08040008
+#define	FML_FLASH_PAGE			            0x08040000
+#define	FML_FLASH_FLAG_ADRESS           0x08040000
+#define	IN_FML_DATA_ADRESS              0x08040004
+#define	OUT_FML_DATA_ADRESS             0x08040008
+#define	DRAIN_FML_DATA_ADRESS           0x0804000C
+
+#define	FML_FLASH_KEY 			            0x22061990
 
 void FlashUnlock (void);
 void FlashLock (void);

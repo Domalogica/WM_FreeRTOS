@@ -20,6 +20,7 @@
 
 void vTaskDefault		(void *argument);
 void vTaskDispenser (void *argument);
+void vTaskFLASH			(void *argument);
 void vTaskLCD 			(void *argument);
 void vTaskKey 			(void *argument);
 
@@ -57,17 +58,10 @@ int main (void)
 	InitTIM2();
 	//NC_portInit();
 	//ADC1_Init();
-	FlashUnlock();
-	FlashErase(0x08040000);
-	FlashErase(0x08040004);
-	FlashErase(0x08040008);
-	FlashWriteData(0x08040000, 0x12345678);
-	FlashWriteData(0x08040004, 0x10203040);
-	FlashWriteData(0x08040008, 0x11111111);
-	FlashLock();
 
 	xTaskCreate(vTaskDefault, 	"Default",   256, NULL, 2, NULL);
 	xTaskCreate(vTaskDispenser,	"Dispenser", 256, NULL, 1, NULL);
+	xTaskCreate(vTaskFLASH,    	"FLASH",     128, NULL, 1, NULL);
 	xTaskCreate(vTaskLCD,     	"LCD",       128, NULL, 1, NULL);
 	xTaskCreate(vTaskKey,     	"KEY",       128, NULL, 1, NULL);
 	
@@ -129,13 +123,13 @@ void vTaskDefault (void *argument)
 			status_code = STATUS_FAILTURE;
 			err_system_code = ERR_NO_WATER;
 		}
-		
+		/*
 		if((!IsDrinanageSensor()) && Is_OutPressSensor() && (!system_status))	//Утечка в дренаже
 		{
 			system_status = 1;
 			status_code = STATUS_FAILTURE;
 			err_system_code = ERR_DRAINAGE_LEAK;
-		}
+		}*/
 		/*
 		if(Is_OutPressSensor() && (!system_status))	
 		{
@@ -231,6 +225,56 @@ void vTaskDispenser (void *argument)
 	}
 }
 
+void vTaskFLASH (void *argument)
+{
+	uint32_t fml_dataKey = 0;
+	uint32_t oldFlashData[3] = {0,0,0};
+	uint32_t newFlashData[3] = {0,0,0};
+
+	fml_dataKey = FlashReadData(FML_FLASH_FLAG_ADRESS);
+	
+	if(fml_dataKey == FML_FLASH_KEY)
+	{
+		oldFlashData[0] = FlashReadData(IN_FML_DATA_ADRESS);
+		oldFlashData[1] = FlashReadData(DRAIN_FML_DATA_ADRESS);
+		oldFlashData[2] = FlashReadData(OUT_FML_DATA_ADRESS);
+		
+		FLM_SetTic(oldFlashData[0], oldFlashData[1], oldFlashData[2], 0x00000000);
+	}else
+	{
+		FlashUnlock();
+		FlashErase(FML_FLASH_PAGE);
+		FlashWriteData(FML_FLASH_FLAG_ADRESS, FML_FLASH_KEY);
+		FlashLock();
+	}
+
+	while(1)
+	{
+		oldFlashData[0] = FlashReadData(IN_FML_DATA_ADRESS);
+		oldFlashData[1] = FlashReadData(DRAIN_FML_DATA_ADRESS);
+		oldFlashData[2] = FlashReadData(OUT_FML_DATA_ADRESS);
+		
+		newFlashData[0] = FLM_GetTic(FLM_IN);
+		newFlashData[1] = FLM_GetTic(FLM_DRAINAGE);
+		newFlashData[2] = FLM_GetTic(FLM_OUT);
+		
+		if((newFlashData[0] != oldFlashData[0]) || (newFlashData[1] != oldFlashData[1]) || (newFlashData[2] != oldFlashData[2]))
+			{
+				FlashUnlock();
+				FlashErase(FML_FLASH_PAGE);
+				
+				FlashWriteData(IN_FML_DATA_ADRESS, 		newFlashData[0]);
+				FlashWriteData(DRAIN_FML_DATA_ADRESS, newFlashData[1]);
+				FlashWriteData(OUT_FML_DATA_ADRESS, 	newFlashData[2]);
+				
+				FlashWriteData(FML_FLASH_FLAG_ADRESS, FML_FLASH_KEY);
+				FlashUnlock();
+			}
+			
+		vTaskDelay(10000);
+	}
+}
+
 void vTaskLCD (void *argument)
 {	
 	//Normal mode text
@@ -238,9 +282,9 @@ void vTaskLCD (void *argument)
 	uint8_t text_DeveliryWater[15] = {0x20,0x42,0xC3,0xE3,0x61,0xC0,0x61,0x20,0xB3,0x6F,0xE3,0xC3,0x20,0x20,0x20}; //Выдача воды
 	uint8_t text_Failture     [13] = {0x41,0x42,0x41,0x50,0xA5,0xB1,0x3A,0x20,0xBA,0x6F,0xE3,0x20,0x3E}; 					 //АВАРИЯ: код 
 
-	uint8_t text_LitersMin[15] = {0xA7,0xB8,0xBF,0x70,0x6F,0xB3,0x2F,0xBC,0xB8,0xBD,0x2E,0x3A,0x20,0x20,0x20};//Литров/.мин:
-	//uint8_t text_OutLiters[15] = {0xA8,0x6F,0x63,0xBB,0x2E,0x20,0x63,0x65,0x61,0xBD,0x63,0x3A,0x20,0x20,0x20};//Посл. сеанс:
-	uint8_t text_OutTotals[15] = {0x42,0xC3,0xE3,0x61,0xBD,0x6F,0x20,0xB3,0x63,0x65,0xB4,0x6F,0x3A,0x20,0x20};//Выдано всего: 
+	uint8_t text_LitersMin[15] = {0xA7,0xB8,0xBF,0x70,0x6F,0xB3,0x2F,0xBC,0xB8,0xBD,0x2E,0x3A,0x20,0x20,0x20};		 //Литров/.мин:
+	//uint8_t text_OutLiters[15] = {0xA8,0x6F,0x63,0xBB,0x2E,0x20,0x63,0x65,0x61,0xBD,0x63,0x3A,0x20,0x20,0x20};	 //Посл. сеанс:
+	uint8_t text_OutTotals[15] = {0x42,0xC3,0xE3,0x61,0xBD,0x6F,0x20,0xB3,0x63,0x65,0xB4,0x6F,0x3A,0x20,0x20};		 //Выдано всего: 
 	
 	uint8_t textDataLitersMin[5] = {'*','*','*','*','*'};
 	uint8_t textDataLitTotals[5] = {'*','*','*','*','*'};

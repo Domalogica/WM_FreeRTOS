@@ -19,6 +19,7 @@ void FLM_ResetTic(uint8_t fml_num);
 
 FML_data FLM_GetData(void);
 uint32_t FLM_GetTic(uint8_t fml_num);
+void FLM_SetTic(uint32_t fml1, uint32_t fml2,uint32_t fml3, uint32_t fml4);
 
 #define FLM_1                					1
 #define FLM_2                					2

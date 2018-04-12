@@ -17,7 +17,7 @@
 #define	ERR_INPUT_FLOWMETER						0x0E		//Не работает входной расходомер
 #define	ERR_OUTPUT_FLOWMETER					0x0F		//Не работает выходной расходомер
 #define	ERR_DRAINAGE_FLOWMETER				0x10		//Не работает дренажный расходомер
-#define	ERR_DRAINAGE_LEAK							0x10		//Утечка в линии дренажа
+#define	ERR_DRAINAGE_LEAK							0x11		//Утечка в линии дренажа
 
 #define	ERR_IO_ERROR                 -1		// I/O error
 #define	ERR_FLUSHED                  -2		// Request flushed from queue
