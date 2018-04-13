@@ -1,7 +1,7 @@
 #include "stm32f1xx.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#include "queue.h"
+#include "queue.h"  
 #include "main.h"
 #include "system.h"
 #include "gpio.h"
@@ -28,9 +28,8 @@ uint8_t  IsOsmosWashing 	    = 0;
 uint16_t dispenser_mode	 			=	5;
 uint16_t dispenser_flag	 			=	0;
 
-int8_t  system_status     = 0;
+int8_t  status_system     = 0;
 int8_t  status_code       = 0;
-int8_t  err_system_code   = 0;
 
 uint8_t  in_valve = 0;
 uint8_t  out_valve = 0;
@@ -41,9 +40,14 @@ uint16_t drainage_switch_time = 0;
 uint16_t drainage_switch_time2 = 0;
 
 uint8_t  operation_mode = 0;
+
+//TODO: debug
+uint8_t input_sensor = 0;
+uint8_t output_sensor = 0;
+uint8_t drainage_sensor = 0;
 	
 int main (void)
-{ 	
+{ 
 	RCC_Init();
 	//MCO_out(); Frequency testing (PIN_A8)
 	GPIO_Init();
@@ -56,8 +60,8 @@ int main (void)
 	FLM_ResetData();
 	BILL_PortInit();
 	InitTIM2();
+	InitTIM3();
 	//NC_portInit();
-	//ADC1_Init();
 
 	xTaskCreate(vTaskDefault, 	"Default",   256, NULL, 2, NULL);
 	xTaskCreate(vTaskDispenser,	"Dispenser", 256, NULL, 1, NULL);
@@ -74,84 +78,56 @@ int main (void)
 
 void vTaskDefault (void *argument)
 {
-	
 	while(1)
-	{
-		//Pressure at the input is, but there is no output
-		if(Is_InPressSensor() && (!Is_OutPressSensor()) && (!system_status))	
+	{	
+		input_sensor = IsPressureSensor();
+		output_sensor = Is_OutPressSensor();
+		drainage_sensor = IsDrinanageSensor();
+	
+		if(!IsPressureSensor())
 		{
-			TRIAC_Enable (TR_WATER_SUPPLY); //РћС‚РєСЂС‹Р»Рё РІС…РѕРґРЅРѕР№ РєР»Р°РїР°РЅ
-			TRIAC_Enable (TR_WATER_PUMP);		//Р’РєСЋС‡РёР»Рё РЅР°СЃРѕСЃ РЅР°РіРЅРµС‚Р°РЅРёСЏ РґР°РІР»РµРЅРёСЏ 
-			dispenser_flag = 1;
-
-			if (drainage_switch_time > 60) //Р¶РґРµРј 60*25РјСЃ СЃРµРєСѓРЅРґ
-			{
-				TRIAC_Enable (TR_DRAINAGE);   //РћС‚РєСЂС‹РІР°РµРј РґСЂРµРЅР°Р¶РЅС‹Р№ РєР»Р°РїР°РЅ
-			}
-			
-			if (IsDrinanageSensor() && (drainage_switch_time > 150)) //РџСЂРѕРІРµСЂСЏРµРј, СЃСЂР°Р±РѕС‚Р°Р» Р»Рё РґР°С‚С‡РёРє РїРѕС‚РѕРєР° РїРѕСЃР»Рµ 5 СЃРµРє
-			{
-				//РђРІР°СЂРёСЏ
-				TRIAC_Disable (TR_WATER_SUPPLY); //Р—Р°РєСЂС‹РІР°РµРј РІС…РѕРґРЅРѕР№ РєР»Р°РїР°РЅ
-				TRIAC_Disable (TR_WATER_PUMP);	 //Р’С‹РєР»СЋС‡Р°РµРј РЅР°СЃРѕСЃ
-				TRIAC_Disable (TR_DRAINAGE);		 //Р—Р°РєСЂС‹РІР°РµРј РґСЂРµРЅР°Р¶РЅС‹Р№ РєР»Р°РїР°РЅ
-				dispenser_flag = 0;							 //РћС‚РєР»СЋС‡Р°РµРј РґРѕР·Р°С‚РѕСЂ	
-				system_status = 1;
-				status_code = STATUS_FAILTURE;
-				err_system_code = ERR_DRAINAGE_IS_BLOCKED;
-				drainage_switch_time = 0;				 	
-			}else status_code = STATUS_ACTIVE;
-			
-			drainage_switch_time++;	
-		}else if (!system_status)
+			status_system = SYSTEM_FAILTURE;
+			status_code = ERR_NO_WATER;
+		}		
+		
+		if(IsPressureSensor() && (status_code == ERR_NO_WATER))
 		{
-			TRIAC_Disable (TR_WATER_SUPPLY);
-			TRIAC_Disable (TR_WATER_PUMP);
-			dispenser_flag = 0;	             //РћС‚РєР»СЋС‡Р°РµРј РґРѕР·Р°С‚РѕСЂ
-			if (drainage_switch_time2 > 200) //Р–РґРµРј 5 СЃРµРєСѓРЅРґ
-			{
-				TRIAC_Disable (TR_DRAINAGE);   //Р—Р°РєСЂС‹РІР°РµРј РґСЂРµРЅР°Р¶РЅС‹Р№ РєР»Р°РїР°РЅ
-				drainage_switch_time2 = 0;
-			}
-			drainage_switch_time2++;	
+			status_system = SYSTEM_OK;
 			status_code = STATUS_OK;
 		}
 		
-		if(Is_InPressSensor() && (!system_status))	//РќРµС‚ РІРѕРґС‹
+		if ((drainage_switch_time > 200) && (!IsDrinanageSensor()) && (status_code == STATUS_ACTIVE)) //ждем 200*25мс секунд
 		{
-			system_status = 1;
-			status_code = STATUS_FAILTURE;
-			err_system_code = ERR_NO_WATER;
+			status_system = SYSTEM_FAILTURE;
+			drainage_switch_time = 0;
 		}
-		/*
-		if((!IsDrinanageSensor()) && Is_OutPressSensor() && (!system_status))	//РЈС‚РµС‡РєР° РІ РґСЂРµРЅР°Р¶Рµ
+		
+		if((!Is_OutPressSensor()) && Is_InPressSensor() && (status_system == SYSTEM_OK))
 		{
-			system_status = 1;
-			status_code = STATUS_FAILTURE;
-			err_system_code = ERR_DRAINAGE_LEAK;
-		}*/
-		/*
-		if(Is_OutPressSensor() && (!system_status))	
+			TRIAC_Enable (TR_WATER_SUPPLY); //Открыли входной клапан
+			TRIAC_Enable (TR_DRAINAGE);   	//Открываем дренажный клапан
+			TRIAC_Enable (TR_WATER_PUMP);		//Вкючили насос нагнетания давления	
+			status_code = STATUS_ACTIVE;
+		  drainage_switch_time++;
+		}else
 		{
-			fmlCheck = FLM_GetTic(FLM_IN);
-			vTaskDelay(100);
-			if(!(fmlCheck == FLM_GetTic(FLM_IN)))
-			{
-				system_status = STATUS_FAILTURE;
-				err_system_code = ERR_WATER_LEAK;
-			}
-		}*/
-	
-		//РРЅРґРёРєР°С‚РѕСЂ Р°РєС‚РёРІРЅРѕСЃС‚Рё Р·Р°РґР°С‡Рё 
+			TRIAC_Disable (TR_WATER_PUMP);	//Выкючили насос нагнетания давления
+			TRIAC_Disable (TR_WATER_SUPPLY);//Закрыли входной клапан
+			TRIAC_Disable (TR_DRAINAGE);   	//Закрываем дренажный клапан
+			drainage_switch_time = 0;
+		}
+		
 		if(active_status > 35)
 		{
 			GPIO_SetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
 		}
+		
 		if(active_status > 40)
 		{
 			GPIO_ResetOutputPin(PORT_LED_ACTIVE, PIN_LED_ACTIVE);
 			active_status = 0;
 		}
+		
 		active_status++;
 		vTaskDelay(25);
 	}
@@ -278,13 +254,13 @@ void vTaskFLASH (void *argument)
 void vTaskLCD (void *argument)
 {	
 	//Normal mode text
-	uint8_t text_ReadyDeveliry[15] = {0xA1,0x6F,0xBF,0x6F,0xB3,0x20,0xBA,0x20,0xB3,0xC3,0xE3,0x61,0xC0,0x65,0x20}; //Р“РѕС‚РѕРІ Рє РІС‹РґР°С‡Рµ
-	uint8_t text_DeveliryWater[15] = {0x20,0x42,0xC3,0xE3,0x61,0xC0,0x61,0x20,0xB3,0x6F,0xE3,0xC3,0x20,0x20,0x20}; //Р’С‹РґР°С‡Р° РІРѕРґС‹
-	uint8_t text_Failture     [13] = {0x41,0x42,0x41,0x50,0xA5,0xB1,0x3A,0x20,0xBA,0x6F,0xE3,0x20,0x3E}; 					 //РђР’РђР РРЇ: РєРѕРґ 
+	uint8_t text_ReadyDeveliry[15] = {0xA1,0x6F,0xBF,0x6F,0xB3,0x20,0xBA,0x20,0xB3,0xC3,0xE3,0x61,0xC0,0x65,0x20}; //Готов к выдаче
+	uint8_t text_DeveliryWater[15] = {0x20,0x42,0xC3,0xE3,0x61,0xC0,0x61,0x20,0xB3,0x6F,0xE3,0xC3,0x20,0x20,0x20}; //Выдача воды
+	uint8_t text_Failture     [13] = {0x41,0x42,0x41,0x50,0xA5,0xB1,0x3A,0x20,0xBA,0x6F,0xE3,0x20,0x3E}; 					 //АВАРИЯ: код 
 
-	uint8_t text_LitersMin[15] = {0xA7,0xB8,0xBF,0x70,0x6F,0xB3,0x2F,0xBC,0xB8,0xBD,0x2E,0x3A,0x20,0x20,0x20};		 //Р›РёС‚СЂРѕРІ/.РјРёРЅ:
-	//uint8_t text_OutLiters[15] = {0xA8,0x6F,0x63,0xBB,0x2E,0x20,0x63,0x65,0x61,0xBD,0x63,0x3A,0x20,0x20,0x20};	 //РџРѕСЃР». СЃРµР°РЅСЃ:
-	uint8_t text_OutTotals[15] = {0x42,0xC3,0xE3,0x61,0xBD,0x6F,0x20,0xB3,0x63,0x65,0xB4,0x6F,0x3A,0x20,0x20};		 //Р’С‹РґР°РЅРѕ РІСЃРµРіРѕ: 
+	uint8_t text_LitersMin[15] = {0xA7,0xB8,0xBF,0x70,0x6F,0xB3,0x2F,0xBC,0xB8,0xBD,0x2E,0x3A,0x20,0x20,0x20};		 //Литров/.мин:
+	//uint8_t text_OutLiters[15] = {0xA8,0x6F,0x63,0xBB,0x2E,0x20,0x63,0x65,0x61,0xBD,0x63,0x3A,0x20,0x20,0x20};	 //Посл. сеанс:
+	uint8_t text_OutTotals[15] = {0x42,0xC3,0xE3,0x61,0xBD,0x6F,0x20,0xB3,0x63,0x65,0xB4,0x6F,0x3A,0x20,0x20};		 //Выдано всего: 
 	
 	uint8_t textDataLitersMin[5] = {'*','*','*','*','*'};
 	uint8_t textDataLitTotals[5] = {'*','*','*','*','*'};
@@ -294,10 +270,10 @@ void vTaskLCD (void *argument)
 	float literMinResult = 0.0;
 	
 	//Service mode text
-	uint8_t text_ServiceMode[15]	= {0x43,0x65,0x70,0xB3,0xB8,0x63,0xBD,0xC3,0xB9,0x20,0x70,0x65,0xB6,0xB8,0xBC}; //РЎРµСЂРІРёСЃРЅС‹Р№ СЂРµР¶РёРј
-	uint8_t text_Input[7]					= {0x42,0x78,0x6F,0xE3,0x3A,0x20,0x20}; //Р’С…РѕРґ
-	uint8_t text_Output[7]				= {0x42,0xC3,0x78,0x6F,0xE3,0x3A,0x20}; //Р’С‹С…РѕРґ
-	uint8_t text_Drainage[7] 			= {0xE0,0x70,0x65,0xBD,0x61,0xB6,0x3A}; //Р”СЂРµРЅР°Р¶
+	uint8_t text_ServiceMode[15]	= {0x43,0x65,0x70,0xB3,0xB8,0x63,0xBD,0xC3,0xB9,0x20,0x70,0x65,0xB6,0xB8,0xBC}; //Сервисный режим
+	uint8_t text_Input[7]					= {0x42,0x78,0x6F,0xE3,0x3A,0x20,0x20}; //Вход
+	uint8_t text_Output[7]				= {0x42,0xC3,0x78,0x6F,0xE3,0x3A,0x20}; //Выход
+	uint8_t text_Drainage[7] 			= {0xE0,0x70,0x65,0xBD,0x61,0xB6,0x3A}; //Дренаж
 	uint8_t textFmlInLiters[5] 		= {'*','*','*','*','*'};
 	uint8_t textFmlOutLiters[5]		= {'*','*','*','*','*'};
 	uint8_t textFmlDrainageLiters[5] = {'*','*','*','*','*'};
@@ -331,14 +307,15 @@ void vTaskLCD (void *argument)
 	
 			//Line 1
 			LCD_SetCursor(0, 3);
+			
 			if(status_code == STATUS_OK) LCD_SendString(text_ReadyDeveliry, 15);
-			if(status_code == STATUS_ACTIVE) LCD_SendString(text_DeveliryWater, 15);
-			if(status_code == STATUS_FAILTURE)
-			{
-				Int16ToString((uint8_t)err_system_code, textDataErrCode, 2);
-				LCD_SendString(text_Failture, 13);
-				LCD_SendString(textDataErrCode, 2);
-			}
+			else if(status_code == STATUS_ACTIVE) LCD_SendString(text_DeveliryWater, 15);
+  				 else 
+					 {
+							Int16ToString((uint8_t)status_code, textDataErrCode, 2);
+							LCD_SendString(text_Failture, 13);
+							LCD_SendString(textDataErrCode, 2);
+					 }
 			
 			//Line 2
 			LCD_SetCursor(1, 0);
@@ -352,7 +329,8 @@ void vTaskLCD (void *argument)
 				
 			//Line 4
 			LCD_SetCursor(3, 0);
-			LCD_SendString((uint8_t*)"                    ", 20);
+			//LCD_SendString((uint8_t*)"                    ", 20);
+					 LCD_SendStringRus((uint8_t*)"Привет чурки", 12);		 
 		}
 		
 		if(operation_mode == SERVICE_MODE)
@@ -410,22 +388,11 @@ void vTaskKey (void *argument)
 		{
 			if(operation_mode == NORMAL_MODE) operation_mode = SERVICE_MODE;
 			else if (operation_mode == SERVICE_MODE) operation_mode = NORMAL_MODE;
-			/*
-			{
-				
-				TRIAC_Disable(TR_OSMOS_WASHING);
-				IsOsmosWashing = 0;
-			}else
-			{
-				TRIAC_Enable (TR_OSMOS_WASHING);
-				IsOsmosWashing = 1;
-			}*/
 		}
 		if(Is_ButtonRight())
 		{
-			status_code = 0;
-			system_status = 0; //Reset failture 
-			err_system_code = 0;
+			status_code = STATUS_OK;
+			status_system = SYSTEM_OK; 
 		}
 		vTaskDelay(150);
 	}

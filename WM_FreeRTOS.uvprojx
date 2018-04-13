@@ -466,16 +466,6 @@
               <FilePath>.\Code\src\err_handler.c</FilePath>
             </File>
             <File>
-              <FileName>adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\src\adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>adc_us.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Code\src\adc_us.c</FilePath>
-            </File>
-            <File>
               <FileName>flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\src\flash.c</FilePath>
