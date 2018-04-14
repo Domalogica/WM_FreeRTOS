@@ -12,6 +12,7 @@
 #define	STATUS_BUSY                  	0x05
 #define	STATUS_SUSPEND               	0x06
 #define	STATUS_FAILTURE              	0x07
+#define	STATUS_MANUAL_MODE           	0x07
 
 #define	ERR_NO_WATER									0x0A		//Нет воды
 #define	ERR_WATER_LEAK         				0x0B		//Утечка воды 

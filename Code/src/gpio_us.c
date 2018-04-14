@@ -34,7 +34,7 @@ void GPIO_Init (void)
 	GPIO_SetPinMode(PORT_OUTPUT_PRESS_SENSOR, PIN_OUTPUT_PRESS_SENSOR, GPIO_MODE_INPUT);					//Out pressure
 	GPIO_SetPinPull(PORT_OUTPUT_PRESS_SENSOR, PIN_OUTPUT_PRESS_SENSOR, GPIO_PULL_UP);
 	
-	//GPIO_SetPinMode(PORT_DRAINAGE_FLOW, PIN_DRAINAGE_FLOW, GPIO_MODE_INPUT);										  //Drainage flow
+	//GPIO_SetPinMode(PORT_DRAINAGE_FLOW, PIN_DRAINAGE_FLOW, GPIO_MODE_INPUT);										//Drainage flow
 	//GPIO_SetPinPull(PORT_DRAINAGE_FLOW, PIN_DRAINAGE_FLOW, GPIO_PULL_UP);
 	
 	GPIO_SetPinMode(PORT_BUTTON_DOWN, PIN_BUTTON_DOWN, GPIO_MODE_INPUT);													//Button 1
@@ -48,6 +48,12 @@ void GPIO_Init (void)
 	
 	GPIO_SetPinMode(PORT_BUTTON_RIGHT, PIN_BUTTON_RIGHT, GPIO_MODE_INPUT);												//Button 4
 	GPIO_SetPinPull(PORT_BUTTON_RIGHT, PIN_BUTTON_RIGHT, GPIO_PULL_NO);
+	
+	GPIO_SetPinMode(PORT_BUTTON_FAIL, PIN_BUTTON_FAIL, GPIO_MODE_INPUT);												//Ext button fail
+	GPIO_SetPinPull(PORT_BUTTON_FAIL, PIN_BUTTON_FAIL, GPIO_PULL_UP);
+	
+	GPIO_SetPinMode(PORT_BUTTON_MODE, PIN_BUTTON_MODE, GPIO_MODE_INPUT);												//Ext button mode
+	GPIO_SetPinPull(PORT_BUTTON_MODE, PIN_BUTTON_MODE, GPIO_PULL_UP);
 	
 }
 
@@ -65,7 +71,18 @@ uint8_t Is_DrainageFlow(void)
 {
 	return (PORT_DRAINAGE_FLOW->IDR & DATA_DRAINAGE_FLOW) != 0;
 }
-*/	
+*/
+
+uint8_t Is_ExtButFailDown(void)
+{
+	return (PORT_BUTTON_FAIL->IDR & DATA_BUTTON_FAIL) == 0;
+}
+
+uint8_t Is_ExtButModeDown(void)
+{
+	return (PORT_BUTTON_MODE->IDR & DATA_BUTTON_MODE) == 0;
+}
+
 uint8_t Is_ButtonLeft(void)
 {
 	return (PORT_BUTTON_LEFT->IDR & DATA_BUTTON_LEFT) == 0;

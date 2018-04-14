@@ -39,6 +39,14 @@
 	#define PORT_BUTTON_RIGHT  				GPIOE
 	#define PIN_BUTTON_RIGHT					GPIO_PIN_6
 	#define DATA_BUTTON_RIGHT 				GPIO_IDR_IDR6
+	
+	#define PORT_BUTTON_FAIL  				GPIOF
+	#define PIN_BUTTON_FAIL						GPIO_PIN_9
+	#define DATA_BUTTON_FAIL 					GPIO_IDR_IDR9
+	
+	#define PORT_BUTTON_MODE  				GPIOB
+	#define PIN_BUTTON_MODE						GPIO_PIN_0
+	#define DATA_BUTTON_MODE 					GPIO_IDR_IDR0
 
 #endif
 
@@ -46,6 +54,9 @@ void GPIO_Init (void);
 uint8_t Is_InPressSensor(void);
 uint8_t Is_OutPressSensor(void);
 //uint8_t Is_DrainageFlow(void);
+
+uint8_t Is_ExtButFailDown(void);
+uint8_t Is_ExtButModeDown(void);
 
 uint8_t Is_ButtonLeft(void);
 uint8_t Is_ButtonRight(void);

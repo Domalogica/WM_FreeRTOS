@@ -76,8 +76,8 @@ void TIM3_IRQHandler (void)
 
 	if(counterTim3 > 50)
 	{
-		if(counterInPressure > 10) sensorInPressure = 1; 
-		else sensorInPressure = 0; 
+		if(counterInPressure > 10) sensorInPressure = 0; 
+		else sensorInPressure = 1; 
 		counterInPressure = 0; 
 		counterTim3 = 0;
 	}

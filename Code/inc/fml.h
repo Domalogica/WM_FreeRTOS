@@ -33,7 +33,7 @@ void FLM_SetTic(uint32_t fml1, uint32_t fml2,uint32_t fml3, uint32_t fml4);
 
 #define FLM_IN_COEF         					450.0
 #define FLM_DRAINAGE_COEF  						450.0
-#define FLM_OUT_COEF        					450.0
+#define FLM_OUT_COEF        					430.0
 #define FML_NC_COEF          					450.0
 
 

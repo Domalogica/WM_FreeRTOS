@@ -24,23 +24,22 @@ void vTaskFLASH			(void *argument);
 void vTaskLCD 			(void *argument);
 void vTaskKey 			(void *argument);
 
-uint8_t  IsOsmosWashing 	    = 0;
-uint16_t dispenser_mode	 			=	5;
-uint16_t dispenser_flag	 			=	0;
-
-int8_t  status_system     = 0;
-int8_t  status_code       = 0;
-
+//Dispenser
+uint8_t  IsOsmosWashing	= 0;
+uint16_t dispenser_mode	=	5;
+uint16_t dispenser_flag	=	0;
+//System
+uint8_t  status_system = 0;
+uint8_t  status_code = 0;
+uint16_t drainage_switch_time = 0;
+uint8_t  manual_mode = 0;
+//Lcd
+uint8_t  operation_mode = 0;
 uint8_t  in_valve = 0;
 uint8_t  out_valve = 0;
 uint8_t  drainage_valve = 0;
-
+//Led
 uint8_t  active_status = 0;
-uint16_t drainage_switch_time = 0;
-uint16_t drainage_switch_time2 = 0;
-
-uint8_t  operation_mode = 0;
-
 //TODO: debug
 uint8_t input_sensor = 0;
 uint8_t output_sensor = 0;
@@ -78,43 +77,54 @@ int main (void)
 
 void vTaskDefault (void *argument)
 {
+	
 	while(1)
 	{	
-		input_sensor = IsPressureSensor();
+		input_sensor = Is_InPressSensor(); // IsPressureSensor();
 		output_sensor = Is_OutPressSensor();
 		drainage_sensor = IsDrinanageSensor();
 	
-		if(!IsPressureSensor())
+		if(!input_sensor)
 		{
 			status_system = SYSTEM_FAILTURE;
 			status_code = ERR_NO_WATER;
 		}		
 		
-		if(IsPressureSensor() && (status_code == ERR_NO_WATER))
+		if(Is_InPressSensor() && (status_code == ERR_NO_WATER))
 		{
 			status_system = SYSTEM_OK;
 			status_code = STATUS_OK;
 		}
-		
-		if ((drainage_switch_time > 200) && (!IsDrinanageSensor()) && (status_code == STATUS_ACTIVE)) //ждем 200*25мс секунд
+
+		if((drainage_switch_time > 200) && (!drainage_sensor) && (status_code == STATUS_ACTIVE))
 		{
 			status_system = SYSTEM_FAILTURE;
+			status_code = ERR_DRAINAGE_IS_BLOCKED;
 			drainage_switch_time = 0;
 		}
 		
 		if((!Is_OutPressSensor()) && Is_InPressSensor() && (status_system == SYSTEM_OK))
 		{
-			TRIAC_Enable (TR_WATER_SUPPLY); //Открыли входной клапан
-			TRIAC_Enable (TR_DRAINAGE);   	//Открываем дренажный клапан
-			TRIAC_Enable (TR_WATER_PUMP);		//Вкючили насос нагнетания давления	
+			TRIAC_Enable (TR_WATER_SUPPLY);
+			TRIAC_Enable (TR_DRAINAGE);
+			TRIAC_Enable (TR_WATER_PUMP);
 			status_code = STATUS_ACTIVE;
 		  drainage_switch_time++;
+			//Debug to lcd
+			in_valve = 1;
+			out_valve = 1;
+			drainage_valve = 1;
 		}else
 		{
-			TRIAC_Disable (TR_WATER_PUMP);	//Выкючили насос нагнетания давления
-			TRIAC_Disable (TR_WATER_SUPPLY);//Закрыли входной клапан
-			TRIAC_Disable (TR_DRAINAGE);   	//Закрываем дренажный клапан
+			TRIAC_Disable (TR_WATER_PUMP);
+			TRIAC_Disable (TR_WATER_SUPPLY);
+			TRIAC_Disable (TR_DRAINAGE);
 			drainage_switch_time = 0;
+			if(status_code == STATUS_ACTIVE) status_code = STATUS_OK;
+			//Debug to lcd
+			in_valve = 0;
+			out_valve = 0;
+			drainage_valve = 0;
 		}
 		
 		if(active_status > 35)
@@ -252,15 +262,15 @@ void vTaskFLASH (void *argument)
 }
 
 void vTaskLCD (void *argument)
-{	
-	//Normal mode text
-	uint8_t text_ReadyDeveliry[15] = {0xA1,0x6F,0xBF,0x6F,0xB3,0x20,0xBA,0x20,0xB3,0xC3,0xE3,0x61,0xC0,0x65,0x20}; //Готов к выдаче
-	uint8_t text_DeveliryWater[15] = {0x20,0x42,0xC3,0xE3,0x61,0xC0,0x61,0x20,0xB3,0x6F,0xE3,0xC3,0x20,0x20,0x20}; //Выдача воды
-	uint8_t text_Failture     [13] = {0x41,0x42,0x41,0x50,0xA5,0xB1,0x3A,0x20,0xBA,0x6F,0xE3,0x20,0x3E}; 					 //АВАРИЯ: код 
+{
+	uint8_t text_ItReady[20]  = {0x20,0x20,0x20,0xA1,0x6F,0xBF,0x6F,0xB3,0x20,0xBA,0x20,0xB3,0xC3,0xE3,0x61,0xC0,0x65,0x20,0x20,0x20};
+	uint8_t text_Delivery[20] = {0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x42,0xC3,0xE3,0x61,0xC0,0x61,0x20,0x20,0x20,0x20,0x20,0x20,0x20};
+	uint8_t text_NoWater[20]  = {0x20,0x20,0x41,0xB3,0x61,0x70,0xB8,0xC7,0x3A,0x20,0xBD,0x65,0xBF,0x20,0xB3,0x6F,0xE3,0xC3,0x20,0x20};
+	uint8_t text_ClDrain[20]  = {0x41,0xB3,0x61,0x70,0xB8,0xC7,0x3A,0x20,0xE3,0x70,0x65,0xBD,0x61,0xB6,0x20,0xB7,0x61,0xBA,0x70,0x2E};
+	uint8_t text_Error[16]    = {0x20,0x41,0xB3,0x61,0x70,0xB8,0xC7,0x3A,0x20,0x6F,0xC1,0xB8,0xB2,0xBA,0x61,0x20};
 
-	uint8_t text_LitersMin[15] = {0xA7,0xB8,0xBF,0x70,0x6F,0xB3,0x2F,0xBC,0xB8,0xBD,0x2E,0x3A,0x20,0x20,0x20};		 //Литров/.мин:
-	//uint8_t text_OutLiters[15] = {0xA8,0x6F,0x63,0xBB,0x2E,0x20,0x63,0x65,0x61,0xBD,0x63,0x3A,0x20,0x20,0x20};	 //Посл. сеанс:
-	uint8_t text_OutTotals[15] = {0x42,0xC3,0xE3,0x61,0xBD,0x6F,0x20,0xB3,0x63,0x65,0xB4,0x6F,0x3A,0x20,0x20};		 //Выдано всего: 
+	uint8_t text_LitersMin[15] = {0xA7,0xB8,0xBF,0x70,0x6F,0xB3,0x2F,0xBC,0xB8,0xBD,0x2E,0x3A,0x20,0x20,0x20};
+	uint8_t text_OutTotals[15] = {0x42,0xC3,0xE3,0x61,0xBD,0x6F,0x20,0xB3,0x63,0x65,0xB4,0x6F,0x3A,0x20,0x20}; 
 	
 	uint8_t textDataLitersMin[5] = {'*','*','*','*','*'};
 	uint8_t textDataLitTotals[5] = {'*','*','*','*','*'};
@@ -270,10 +280,10 @@ void vTaskLCD (void *argument)
 	float literMinResult = 0.0;
 	
 	//Service mode text
-	uint8_t text_ServiceMode[15]	= {0x43,0x65,0x70,0xB3,0xB8,0x63,0xBD,0xC3,0xB9,0x20,0x70,0x65,0xB6,0xB8,0xBC}; //Сервисный режим
-	uint8_t text_Input[7]					= {0x42,0x78,0x6F,0xE3,0x3A,0x20,0x20}; //Вход
-	uint8_t text_Output[7]				= {0x42,0xC3,0x78,0x6F,0xE3,0x3A,0x20}; //Выход
-	uint8_t text_Drainage[7] 			= {0xE0,0x70,0x65,0xBD,0x61,0xB6,0x3A}; //Дренаж
+	uint8_t text_ServiceMode[15]	= {0x43,0x65,0x70,0xB3,0xB8,0x63,0xBD,0xC3,0xB9,0x20,0x70,0x65,0xB6,0xB8,0xBC};
+	uint8_t text_Input[7]					= {0x42,0x78,0x6F,0xE3,0x3A,0x20,0x20};
+	uint8_t text_Output[7]				= {0x42,0xC3,0x78,0x6F,0xE3,0x3A,0x20};
+	uint8_t text_Drainage[7] 			= {0xE0,0x70,0x65,0xBD,0x61,0xB6,0x3A};
 	uint8_t textFmlInLiters[5] 		= {'*','*','*','*','*'};
 	uint8_t textFmlOutLiters[5]		= {'*','*','*','*','*'};
 	uint8_t textFmlDrainageLiters[5] = {'*','*','*','*','*'};
@@ -299,38 +309,36 @@ void vTaskLCD (void *argument)
 			{	
 				if(fmlOutLiters - literMinPrevious) literMinResult = (fmlOutLiters - literMinPrevious) * 60;
 				else literMinResult = 0.0;
-				
+
 				literMinPrevious = fmlOutLiters;
-				FloatToString(&fmlOutLiters, (char*)textDataLitTotals,	  3, 1, 1);
+				FloatToString(&fmlOutLiters, (char*)textDataLitTotals,	3, 1, 1);
 				FloatToString(&literMinResult,(char*)textDataLitersMin, 1, 3, 1);
 			}
 	
 			//Line 1
-			LCD_SetCursor(0, 3);
-			
-			if(status_code == STATUS_OK) LCD_SendString(text_ReadyDeveliry, 15);
-			else if(status_code == STATUS_ACTIVE) LCD_SendString(text_DeveliryWater, 15);
-  				 else 
-					 {
-							Int16ToString((uint8_t)status_code, textDataErrCode, 2);
-							LCD_SendString(text_Failture, 13);
-							LCD_SendString(textDataErrCode, 2);
-					 }
+			LCD_SetCursor(1, 0);
+			switch(status_code)
+			{
+				case STATUS_OK: 		LCD_SendString(text_ItReady, 20); break;
+				case STATUS_ACTIVE: LCD_SendString(text_Delivery, 20); break;
+				case ERR_NO_WATER: 	LCD_SendString(text_NoWater, 20); break;
+				case ERR_DRAINAGE_IS_BLOCKED: LCD_SendString(text_ClDrain, 20); break;
+				default:	LCD_SendString(text_Error, 16); 
+									Int16ToString((uint8_t)status_code, textDataErrCode, 2);
+									LCD_SendString(textDataErrCode, 2); break;
+			}
 			
 			//Line 2
-			LCD_SetCursor(1, 0);
+			LCD_SetCursor(2, 0);
 			LCD_SendString(text_LitersMin, 15);
 			LCD_SendString(textDataLitersMin, 5);
 			
 			//Line 3
-			LCD_SetCursor(2, 0);
+			LCD_SetCursor(3, 0);
 			LCD_SendString(text_OutTotals, 15);
 			LCD_SendString(textDataLitTotals, 5);
 				
 			//Line 4
-			LCD_SetCursor(3, 0);
-			//LCD_SendString((uint8_t*)"                    ", 20);
-					 LCD_SendStringRus((uint8_t*)"Привет чурки", 12);		 
 		}
 		
 		if(operation_mode == SERVICE_MODE)
@@ -394,6 +402,32 @@ void vTaskKey (void *argument)
 			status_code = STATUS_OK;
 			status_system = SYSTEM_OK; 
 		}
+		
+		if(Is_ExtButFailDown())
+		{
+			status_code = STATUS_OK;
+			status_system = SYSTEM_OK; 
+			GPIO_TogglePin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
+		}
+		
+		if(Is_ExtButModeDown())
+		{
+			GPIO_TogglePin(PORT_LED_FAILTURE, PIN_LED_FAILTURE);
+			if(manual_mode) 
+			{
+				manual_mode = 0;
+				status_code =  STATUS_OK;
+				//TODO: deactivate uln 1 port
+				//ULN_Disable();
+			}else
+			{	
+				manual_mode = 1;
+				status_code =  STATUS_MANUAL_MODE;
+				//TODO: activate uln 1 port
+				//ULN_Enable();
+			}
+		}
+		
 		vTaskDelay(150);
 	}
 }
