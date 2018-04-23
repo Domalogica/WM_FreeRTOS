@@ -1,24 +1,20 @@
 #include "uart.h"
 #include "power_switch.h"
 
-extern uint16_t dispenser;
-extern uint16_t drainage;
-extern uint16_t outValve;
-
 void UART1_Init (void)
 {
-	RCC->APB2ENR |= RCC_APB2ENR_USART1EN; //Clock source UART1 enable
-	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;   //Clock source port C enable 
-  RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;		//Clock alternate port mode  enable
+	RCC->APB2ENR |= RCC_APB2ENR_USART1EN;	//Clock source UART1 enable
+	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;		//Clock source port C enable
+	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;		//Clock alternate port mode  enable
 	
-	GPIOA->CRH |= GPIO_CRH_CNF9_1;        //TX_PA9
+	GPIOA->CRH |= GPIO_CRH_CNF9_1;        	//TX_PA9
 	GPIOA->CRH |= GPIO_CRH_MODE9;				
 	
-	GPIOA->CRH |= GPIO_CRH_CNF10_0;				//RX_PA10
+	GPIOA->CRH |= GPIO_CRH_CNF10_0;			//RX_PA10
 	GPIOA->CRH &= ~GPIO_CRH_MODE10;
 	
 	//CLEAR_BIT(AFIO->MAPR, AFIO_MAPR_USART3_REMAP);
-  //SET_BIT(AFIO->MAPR, AFIO_MAPR_USART3_REMAP_PARTIALREMAP); 
+	//SET_BIT(AFIO->MAPR, AFIO_MAPR_USART3_REMAP_PARTIALREMAP);
 	
 	USART1->BRR =(APB1CLK+BAUDRATE/2)/BAUDRATE;
 	
@@ -32,11 +28,11 @@ void UART1_Init (void)
 
 void UART2_Init (void)
 {
-	RCC->APB1ENR |= RCC_APB1ENR_USART2EN; //Clock source UART2 enable
-	RCC->APB2ENR |= RCC_APB2ENR_IOPDEN;   //Clock source port C enable 
-  RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;		//Clock alternate port mode  enable
+	RCC->APB1ENR |= RCC_APB1ENR_USART2EN;		//Clock source UART2 enable
+	RCC->APB2ENR |= RCC_APB2ENR_IOPDEN;   		//Clock source port C enable
+	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;			//Clock alternate port mode  enable
 	
-	GPIOC->CRH |= GPIO_CRL_CNF5_1;        //TX_PD5
+	GPIOC->CRH |= GPIO_CRL_CNF5_1;        		//TX_PD5
 	GPIOC->CRH |= GPIO_CRL_MODE5;				
 	
 	GPIOC->CRH |= GPIO_CRL_CNF6_0;				//RX_PD6
@@ -57,18 +53,18 @@ void UART2_Init (void)
 
 void UART3_Init (void)
 {
-	RCC->APB1ENR |= RCC_APB1ENR_USART3EN; //Clock source UART3 enable
-	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;   //Clock source port C enable 
-  RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;		//Clock alternate port mode  enable
+	RCC->APB1ENR |= RCC_APB1ENR_USART3EN; 	//Clock source UART3 enable
+	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;   	//Clock source port C enable
+	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;		//Clock alternate port mode  enable
 	
-	GPIOC->CRH |= GPIO_CRH_CNF10_1;       //TX_PC10
+	GPIOC->CRH |= GPIO_CRH_CNF10_1;       	//TX_PC10
 	GPIOC->CRH |= GPIO_CRH_MODE10;				
 	
-	GPIOC->CRH |= GPIO_CRH_CNF11_0;				//RX_PC11
+	GPIOC->CRH |= GPIO_CRH_CNF11_0;			//RX_PC11
 	GPIOC->CRH &= ~GPIO_CRH_MODE11;
 	
 	CLEAR_BIT(AFIO->MAPR, AFIO_MAPR_USART3_REMAP);
-  SET_BIT(AFIO->MAPR, AFIO_MAPR_USART3_REMAP_PARTIALREMAP); 
+	SET_BIT(AFIO->MAPR, AFIO_MAPR_USART3_REMAP_PARTIALREMAP);
 	
 	USART3->BRR =(APB1CLK+BAUDRATE/2)/BAUDRATE;
 	
@@ -89,7 +85,7 @@ void USART1_Send (uint8_t chr)
 void USART1_Send_String (uint8_t* str)
 {
 	uint8_t i = 0;
-	
+
 	while(str[i])	
 	USART1_Send (str[i++]);
 }
@@ -126,7 +122,7 @@ void USART1_IRQHandler (void)
 	if(USART1->SR & USART_SR_RXNE)
 	{
 		USART1->SR &= ~USART_SR_RXNE;			//Clear IRQ flag
-		//USART1->DR recieve data
+		//USART1->DR receive data
 		//Example if(USART1->DR == '0') actions
 		//        if(USART1->DR == '1') actions
 	}
@@ -137,7 +133,7 @@ void USART2_IRQHandler (void)
 	if(USART2->SR & USART_SR_RXNE)
 	{
 		USART2->SR &= ~USART_SR_RXNE;			//Clear IRQ flag
-		//USART3->DR recieve data
+		//USART3->DR receive data
 		//Example if(USART2->DR == '0') actions
 		//        if(USART2->DR == '1') actions
 	}
@@ -148,7 +144,7 @@ void USART3_IRQHandler (void)
 	if(USART3->SR & USART_SR_RXNE)
 	{
 		USART3->SR &= ~USART_SR_RXNE;			//Clear IRQ flag
-		//USART3->DR recieve data
+		//USART3->DR receive data
 		//Example if(USART3->DR == '0') actions
 		//        if(USART3->DR == '1') actions
 	}

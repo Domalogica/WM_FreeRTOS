@@ -3,7 +3,7 @@
 
 #include "stm32f1xx.h"
 
-#define	FML_FLASH_PAGE			            0x08040000
+#define	FML_FLASH_PAGE			        0x08040000
 #define	FML_FLASH_FLAG_ADRESS           0x08040000
 #define	IN_FML_DATA_ADRESS              0x08040004
 #define	OUT_FML_DATA_ADRESS             0x08040008

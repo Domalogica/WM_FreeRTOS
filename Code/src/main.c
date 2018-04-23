@@ -20,7 +20,7 @@
 
 void vTaskDefault		(void *argument);
 void vTaskDispenser 	(void *argument);
-void vTaskFLASH			(void *argument);
+void vTaskFLASH		(void *argument);
 void vTaskLCD 			(void *argument);
 void vTaskKey 			(void *argument);
 
@@ -65,9 +65,7 @@ int main (void)
 	
 	vTaskStartScheduler();
 	
-	while(1){
-	
-	}
+	while(1){}
 }
 
 void vTaskDefault (void *argument)
